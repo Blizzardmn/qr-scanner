@@ -18,4 +18,25 @@ abstract class BasicActivity<T: ViewBinding>: AppCompatActivity() {
         binding = vBinding()
         setContentView(binding.root)
     }
+
+    private var isPaused = false
+
+    override fun onStart() {
+        super.onStart()
+        isPaused = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isPaused = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        isPaused = false
+    }
+
+    open fun isActivityPaused(): Boolean {
+        return isPaused
+    }
 }

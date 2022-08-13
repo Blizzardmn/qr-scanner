@@ -3,7 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/workspace/Private/QRScanner/app/src/main/res/layout/activity_open.xml" value="0.35572916666666665" />
+        <entry key="..\:/workspace/Private/QRScanner/app/src/main/res/drawable/gradient_26b0ff_4c7fff.xml" value="0.185" />
+        <entry key="..\:/workspace/Private/QRScanner/app/src/main/res/drawable/layer_progress.xml" value="0.185" />
+        <entry key="..\:/workspace/Private/QRScanner/app/src/main/res/layout/activity_main.xml" value="0.35572916666666665" />
+        <entry key="..\:/workspace/Private/QRScanner/app/src/main/res/layout/activity_open.xml" value="0.33" />
+        <entry key="..\:/workspace/Private/QRScanner/app/src/main/res/layout/app_bar_main.xml" value="0.35572916666666665" />
+        <entry key="..\:/workspace/Private/QRScanner/app/src/main/res/layout/content_main.xml" value="0.33" />
+        <entry key="..\:/workspace/Private/QRScanner/app/src/main/res/layout/nav_header_main.xml" value="0.35572916666666665" />
+        <entry key="..\:/workspace/Private/QRScanner/app/src/main/res/menu/activity_main_drawer.xml" value="0.35572916666666665" />
       </map>
     </option>
   </component>
