@@ -7,8 +7,14 @@ import android.app.Application
  */
 class App: Application() {
 
+    companion object {
+        lateinit var ins: App
+    }
+
     override fun onCreate() {
         super.onCreate()
-
+        ins = this
     }
+
+    var isFilter = false
 }

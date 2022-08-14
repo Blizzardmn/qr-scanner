@@ -36,7 +36,8 @@ android {
 
 dependencies {
     implementation project(path: ':mylib')
-    implementation 'com.airbnb.android:lottie:3.0.0'
+    implementation 'com.airbnb.android:lottie:4.1.0'
+    implementation 'pub.devrel:easypermissions:3.0.0'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'

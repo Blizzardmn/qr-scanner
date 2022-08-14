@@ -36,7 +36,7 @@ class CardAdapter(private val context: Context, private val list: List<MainActiv
         this.onClick = onClick
     }
 
-    inner class ViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: ImageView = itemView.findViewById(R.id.img_ic)
         val name: ImageView = itemView.findViewById(R.id.img_name)
     }

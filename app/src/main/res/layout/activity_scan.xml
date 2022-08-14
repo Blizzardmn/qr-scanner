@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.tools.easy.ZXingView
-        android:id="@+id/zxingview_scanner"
+        android:id="@+id/zxingview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:qrcv_animTime="1000"
@@ -17,7 +17,6 @@
         app:qrcv_cornerDisplayType="center"
         app:qrcv_cornerLength="20dp"
         app:qrcv_cornerSize="5dp"
-        app:qrcv_customScanLineDrawable="@drawable/gradient_26b0ff_3826b0ff"
         app:qrcv_isAutoZoom="true"
         app:qrcv_isBarcode="false"
         app:qrcv_isOnlyDecodeScanBoxArea="false"
