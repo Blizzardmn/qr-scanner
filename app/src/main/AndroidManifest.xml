@@ -20,7 +20,8 @@
             android:name=".ui.OpenActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.QRScanner.NoActionBar">
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,8 +29,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".ui.MainActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".ui.ScanActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>
