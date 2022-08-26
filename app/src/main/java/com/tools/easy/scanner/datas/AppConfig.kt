@@ -30,4 +30,12 @@ class AppConfig {
         set(value) {
             sp.edit().putBoolean("is_vibrate_on", value).apply()
         }
+
+    var isBrowserAuto: Boolean
+        get() {
+            return sp.getBoolean("is_browser_auto", false)
+        }
+        set(value) {
+            sp.edit().putBoolean("is_browser_auto", value).apply()
+        }
 }

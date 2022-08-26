@@ -40,10 +40,10 @@
 
     <ImageView
         android:id="@+id/back"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="18dp"
+        android:layout_width="58dp"
+        android:paddingEnd="20dp"
+        android:layout_height="56dp"
+        android:paddingStart="20dp"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

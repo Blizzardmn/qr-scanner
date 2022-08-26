@@ -1,6 +1,7 @@
 package com.tools.easy.scanner.basic
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 
@@ -39,4 +40,13 @@ abstract class BasicActivity<T: ViewBinding>: AppCompatActivity() {
     open fun isActivityPaused(): Boolean {
         return isPaused
     }
+
+    protected fun toastLong(toast: String) {
+        Toast.makeText(applicationContext, toast, Toast.LENGTH_LONG).show()
+    }
+
+    protected fun toastShort(toast: String) {
+        Toast.makeText(applicationContext, toast, Toast.LENGTH_SHORT).show()
+    }
+
 }

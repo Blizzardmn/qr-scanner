@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import com.google.zxing.client.result.ParsedResultType
+import com.google.zxing.client.result.ResultParser
 import com.tools.easy.BarcodeResult
 import com.tools.easy.BeepManager
 import com.tools.easy.QRCodeUtils
@@ -15,6 +17,10 @@ import com.tools.easy.scanner.R
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityScanBinding
 import com.tools.easy.scanner.datas.AppConfig
+import com.tools.easy.scanner.support.GpSupport
+import com.tools.easy.scanner.support.Supports
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -105,15 +111,51 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
     }
 
     override fun onScanQRCodeSuccess(result: BarcodeResult?) {
-        TODO("Not yet implemented")
+        if (result == null) return
+        if (result.result == null) return
+        beepManager?.playBeepSoundAndVibrate()
+        val parsedResult = ResultParser.parseResult(result.result)
+        if (parsedResult.type == ParsedResultType.URI && AppConfig.ins.isBrowserAuto
+            /*&& Supports.checkSns(this, parsedResult.displayResult) == null*/
+        ) {
+            GpSupport.openUrlByBrowser(parsedResult.displayResult)
+        } else {
+            try {
+                toastLong("ScanResult: $parsedResult")
+                //ResultNewActivity.startResultActivity(this, parsedResult)
+            } catch (e: Exception) {
+            }
+        }
+
+        /*GlobalScope.launch {
+            ScanDbHelper().insertItem(
+                ScanItem(
+                    Constant.getItemType(parsedResult.type).first,
+                    System.currentTimeMillis(),
+                    result.result.text,
+                    false
+                )
+            )
+        }*/
     }
 
     override fun onCameraAmbientBrightnessChanged(isDark: Boolean) {
-        TODO("Not yet implemented")
+        var tipText = binding.zxingview.scanBoxView.tipText ?: ""
+        val ambientBrightnessTip = "\\n It is too dark, please turn on the flash"
+        if (isDark) {
+            if (!tipText.contains(ambientBrightnessTip)) {
+                binding.zxingview.scanBoxView.tipText = tipText + ambientBrightnessTip
+            }
+        } else {
+            if (tipText.contains(ambientBrightnessTip)) {
+                tipText = tipText.substring(0, tipText.indexOf(ambientBrightnessTip))
+                binding.zxingview.scanBoxView.tipText = tipText
+            }
+        }
     }
 
     override fun onScanQRCodeOpenCameraError() {
-        TODO("Not yet implemented")
+        toastLong("Opening Camera Error")
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
