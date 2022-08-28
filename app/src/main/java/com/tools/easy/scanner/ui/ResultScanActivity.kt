@@ -7,7 +7,7 @@ import com.tools.easy.scanner.databinding.ActivityResultBinding
 /**
  *  description :
  */
-class ResultActivity: BasicActivity<ActivityResultBinding>() {
+class ResultScanActivity: BasicActivity<ActivityResultBinding>() {
 
     override fun vBinding(): ActivityResultBinding {
         return ActivityResultBinding.inflate(layoutInflater)

@@ -18,9 +18,6 @@ import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityScanBinding
 import com.tools.easy.scanner.datas.AppConfig
 import com.tools.easy.scanner.support.GpSupport
-import com.tools.easy.scanner.support.Supports
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
@@ -54,16 +51,31 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
         QRCodeUtils.setDebug(BuildConfig.DEBUG)
     }
 
+    private var isFlashLighting = false
     override fun onClick(p0: View?) {
         when (p0?.id) {
             R.id.back -> finish()
 
             R.id.img_photos -> {
-
+                if (requestStoragePermissions()) {
+                    openGallery()
+                }
             }
 
             R.id.img_lights -> {
-
+                if (!isFlashLighting) {
+                    binding.zxingview.openFlashlight()
+                } else {
+                    binding.zxingview.closeFlashlight()
+                }
+                isFlashLighting = !isFlashLighting
+                if (isFlashLighting) {
+                    binding.imgLightOpen.visibility = View.VISIBLE
+                    binding.imgLights.visibility = View.INVISIBLE
+                } else {
+                    binding.imgLightOpen.visibility = View.INVISIBLE
+                    binding.imgLights.visibility = View.VISIBLE
+                }
             }
         }
     }
@@ -173,7 +185,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
             Manifest.permission.CAMERA
         )
         if (!EasyPermissions.hasPermissions(this, *perms)) {
-            App.ins.isFilter = true
+            App.isFilter = true
             EasyPermissions.requestPermissions(
                 this@ScanActivity,
                 "Scanning the QR code requires permission to turn on the camera",
@@ -189,7 +201,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
         if (!EasyPermissions.hasPermissions(this, *perms)) {
-            App.ins.isFilter = true
+            App.isFilter = true
             EasyPermissions.requestPermissions(
                 this@ScanActivity,
                 "Opening gallery requires album permission",

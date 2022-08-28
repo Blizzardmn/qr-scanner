@@ -42,7 +42,7 @@ class CreateActivity: BasicActivity<ActivityCreateBinding>() {
     }
     
     private fun doGenerate() {
-        CreateResultActivity.openCreateResultPage(this, CreateEntity(
+        ResultCreateActivity.openCreateResultPage(this, CreateEntity(
             catType,
             when (catType) {
                 //社交网站

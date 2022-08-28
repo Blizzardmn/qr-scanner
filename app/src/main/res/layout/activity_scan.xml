@@ -41,9 +41,9 @@
     <ImageView
         android:id="@+id/back"
         android:layout_width="58dp"
-        android:paddingEnd="20dp"
         android:layout_height="56dp"
         android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -72,6 +72,20 @@
         app:layout_constraintBottom_toBottomOf="@id/img_photos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/img_photos" />
+
+    <ImageView
+        android:id="@+id/img_light_open"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:onClick="onClick"
+        android:scaleType="center"
+        android:src="@mipmap/ic_light_off"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/img_lights"
+        app:layout_constraintEnd_toEndOf="@id/img_lights"
+        app:layout_constraintStart_toStartOf="@id/img_lights"
+        app:layout_constraintTop_toTopOf="@id/img_lights"
+        app:tint="#008000" />
 
     <View
         android:layout_width="1dp"

@@ -26,7 +26,7 @@ import java.util.*
 /**
  *  description :
  */
-class CreateResultActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPermissions.PermissionCallbacks {
+class ResultCreateActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPermissions.PermissionCallbacks {
 
     override fun vBinding(): ActivityCreateResultBinding {
         return ActivityCreateResultBinding.inflate(layoutInflater)
@@ -66,7 +66,7 @@ class CreateResultActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPe
         GlobalScope.launch {
             val parseType: ParsedResultType = createEntity?.convertStandardType() ?: return@launch
             mBitmap = CodeBuilder.buildQRCode(
-                context = this@CreateResultActivity,
+                context = this@ResultCreateActivity,
                 contents = arrayOf(createEntity?.body ?: ""),
                 parsedType = parseType).encodeAsBitmap()
 
@@ -138,7 +138,7 @@ class CreateResultActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPe
         if (!EasyPermissions.hasPermissions(this, *perms)) {
             App.isFilter = true
             EasyPermissions.requestPermissions(
-                this@CreateResultActivity,
+                this@ResultCreateActivity,
                 "Permission required for storing",
                 REQUEST_PERMISSION_STORAGE,
                 *perms
@@ -159,7 +159,7 @@ class CreateResultActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPe
 
         //普通参数型创建二维码
         fun openCreateResultPage(ctx: Context, create: CreateEntity) {
-            val intent = Intent(ctx, CreateResultActivity::class.java)
+            val intent = Intent(ctx, ResultCreateActivity::class.java)
             intent.putExtra("create", create)
             ctx.startActivity(intent)
         }
