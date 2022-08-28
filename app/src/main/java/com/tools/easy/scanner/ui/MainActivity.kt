@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.tools.easy.scanner.R
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityMainBinding
+import com.tools.easy.scanner.support.Supports
 import com.tools.easy.scanner.ui.adapter.CardAdapter
 
 class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener {
@@ -16,7 +17,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener 
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
-    data class TypeItem(@DrawableRes val icon: Int, val name: Int)
+    data class TypeItem(@DrawableRes val icon: Int, val nameImg: Int, val name: String)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,24 +56,24 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener 
 
     private fun initList() {
         val list = arrayListOf(
-            TypeItem(R.mipmap.ic_home_instagram, R.mipmap.hm_instagram),
-            TypeItem(R.mipmap.ic_home_facebook, R.mipmap.hm_facebook),
-            TypeItem(R.mipmap.ic_home_twitter, R.mipmap.hm_twitter),
-            TypeItem(R.mipmap.ic_home_youtube, R.mipmap.hm_youtube),
-            TypeItem(R.mipmap.ic_home_whatsapp, R.mipmap.hm_whatsapp),
-            TypeItem(R.mipmap.ic_home_tiktok, R.mipmap.hm_tiktok),
-            TypeItem(R.mipmap.ic_home_clipboard, R.mipmap.hm_clipboard),
-            TypeItem(R.mipmap.ic_home_email, R.mipmap.hm_email),
-            TypeItem(R.mipmap.ic_home_website, R.mipmap.hm_websites),
-            TypeItem(R.mipmap.ic_home_text, R.mipmap.hm_text),
-            TypeItem(R.mipmap.ic_home_contacts, R.mipmap.hm_contacts),
-            TypeItem(R.mipmap.ic_home_wifi, R.mipmap.hm_wifi)
+            TypeItem(R.mipmap.ic_home_instagram, R.mipmap.hm_instagram, Supports.catInstagram),
+            TypeItem(R.mipmap.ic_home_facebook, R.mipmap.hm_facebook, Supports.catFacebook),
+            TypeItem(R.mipmap.ic_home_twitter, R.mipmap.hm_twitter, Supports.catTwitter),
+            TypeItem(R.mipmap.ic_home_youtube, R.mipmap.hm_youtube, Supports.catYoutube),
+            TypeItem(R.mipmap.ic_home_whatsapp, R.mipmap.hm_whatsapp, Supports.catWhatsapp),
+            TypeItem(R.mipmap.ic_home_tiktok, R.mipmap.hm_tiktok, Supports.catTiktok),
+            TypeItem(R.mipmap.ic_home_clipboard, R.mipmap.hm_clipboard, Supports.catClipboard),
+            TypeItem(R.mipmap.ic_home_email, R.mipmap.hm_email, Supports.catEmail),
+            TypeItem(R.mipmap.ic_home_website, R.mipmap.hm_websites, Supports.catWebsite),
+            TypeItem(R.mipmap.ic_home_text, R.mipmap.hm_text, Supports.catText),
+            /*TypeItem(R.mipmap.ic_home_contacts, R.mipmap.hm_contacts, Supports.catContacts),
+            TypeItem(R.mipmap.ic_home_wifi, R.mipmap.hm_wifi, Supports.catWifi)*/
         )
         binding.main.recyclerView.layoutManager = GridLayoutManager(this, 2)
         val adapter = CardAdapter(this, list)
         binding.main.recyclerView.adapter = adapter
         adapter.setOnClick {
-            //CreateActivity.openCreatePage(this@MainActivity, it.name)
+            CreateActivity.openCreatePage(this@MainActivity, it.name)
         }
     }
 }

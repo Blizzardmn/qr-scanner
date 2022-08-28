@@ -56,6 +56,11 @@
             tools:ignore="LockedOrientationActivity" />
 
         <activity
+            android:name=".ui.CreateResultActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
             android:name=".ui.ResultActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />

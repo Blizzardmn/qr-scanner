@@ -1,5 +1,22 @@
 <resources>
     <string name="app_name">QR Scanner</string>
+    <string name="cat_clipboard" translatable="false">Clipboard</string>
+    <string name="cat_email" translatable="false">Email</string>
+    <string name="cat_website" translatable="false">Website</string>
+    <string name="cat_text" translatable="false">Text</string>
+    <string name="cat_instagram" translatable="false">Instagram</string>
+    <string name="cat_facebook" translatable="false">Facebook</string>
+    <string name="cat_twitter" translatable="false">Twitter</string>
+    <string name="cat_youtube" translatable="false">Youtube</string>
+    <string name="cat_tiktok" translatable="false">Tiktok</string>
+    <string name="cat_whatsapp" translatable="false">Whatsapp</string>
+    <string name="cat_product" translatable="false">Product</string>
+    <string name="cat_cellphone" translatable="false">Cellphone</string>
+    <string name="cat_message" translatable="false">Message</string>
+    <string name="cat_contacts" translatable="false">Contacts</string>
+    <string name="cat_wifi" translatable="false">Wi-Fi</string>
+
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

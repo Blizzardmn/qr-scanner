@@ -24,7 +24,7 @@ class CardAdapter(private val context: Context, private val list: List<MainActiv
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
         holder.icon.setImageResource(item.icon)
-        holder.name.setImageResource(item.name)
+        holder.name.setImageResource(item.nameImg)
         holder.itemView.setOnClickListener {
             onClick?.invoke(item)
         }
