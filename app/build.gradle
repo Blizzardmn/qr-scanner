@@ -18,7 +18,10 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            debuggable false
+            jniDebuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -36,6 +39,8 @@ android {
 
 dependencies {
     implementation project(path: ':mylib')
+
+    implementation("org.greenrobot:eventbus:3.3.1")
     implementation 'com.airbnb.android:lottie:4.1.0'
     implementation 'pub.devrel:easypermissions:3.0.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
