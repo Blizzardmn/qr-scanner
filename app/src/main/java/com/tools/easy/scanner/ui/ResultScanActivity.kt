@@ -46,6 +46,7 @@ class ResultScanActivity: BasicActivity<ActivityResultBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding.back.setOnClickListener { finish() }
         initResult()
     }
 

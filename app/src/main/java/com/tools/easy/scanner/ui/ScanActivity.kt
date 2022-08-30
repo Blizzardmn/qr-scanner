@@ -49,6 +49,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
         binding.imgLights.setOnClickListener(this)
         initSettings()
         QRCodeUtils.setDebug(BuildConfig.DEBUG)
+        binding.zxingview.setDelegate(this)
     }
 
     private var isFlashLighting = false
@@ -62,7 +63,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
                 }
             }
 
-            R.id.img_lights -> {
+            R.id.img_lights, R.id.img_light_open -> {
                 if (!isFlashLighting) {
                     binding.zxingview.openFlashlight()
                 } else {
