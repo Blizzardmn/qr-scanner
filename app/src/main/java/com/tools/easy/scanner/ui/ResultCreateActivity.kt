@@ -40,6 +40,7 @@ class ResultCreateActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createEntity = intent?.getSerializableExtra("create") as CreateEntity?
         syncLoadParams {
             runOnUiThread {
                 binding.imgCode.setImageBitmap(mBitmap)

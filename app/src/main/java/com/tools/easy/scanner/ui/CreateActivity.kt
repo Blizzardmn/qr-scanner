@@ -56,7 +56,7 @@ class CreateActivity: BasicActivity<ActivityCreateBinding>() {
                 Supports.catWebsite,
                 Supports.catClipboard,
                 Supports.catText,
-                Supports.catWebsite -> formatContents(binding.etInputTxt.text.toString())
+                Supports.catWebsite -> formatContents(catType, binding.etInputTxt.text.toString())
 
                 else -> ""
             }
