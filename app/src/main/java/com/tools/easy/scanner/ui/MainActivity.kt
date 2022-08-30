@@ -3,11 +3,13 @@ package com.tools.easy.scanner.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.GridLayoutManager
 import com.tools.easy.scanner.R
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityMainBinding
+import com.tools.easy.scanner.support.GpSupport
 import com.tools.easy.scanner.support.Supports
 import com.tools.easy.scanner.ui.adapter.CardAdapter
 
@@ -27,6 +29,10 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener 
             imgScan.setOnClickListener(this@MainActivity)
             imgSettings.setOnClickListener(this@MainActivity)
         }
+        binding.navView.apply {
+            findViewById<TextView>(R.id.tv_rate).setOnClickListener(this@MainActivity)
+            findViewById<TextView>(R.id.tv_privacy).setOnClickListener(this@MainActivity)
+        }
     }
 
     override fun onClick(v: View?) {
@@ -37,6 +43,14 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener 
 
             R.id.img_settings -> {
                 binding.drawerLayout.openDrawer(binding.navView)
+            }
+
+            R.id.tv_rate -> {
+                GpSupport.skip2Market(packageName)
+            }
+
+            R.id.tv_privacy -> {
+
             }
         }
     }

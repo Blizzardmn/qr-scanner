@@ -134,7 +134,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
             GpSupport.openUrlByBrowser(parsedResult.displayResult)
         } else {
             try {
-                toastLong("ScanResult: $parsedResult")
+                //toastLong("ScanResult: $parsedResult")
                 ResultScanActivity.open(this, parsedResult)
             } catch (e: Exception) {
             }
