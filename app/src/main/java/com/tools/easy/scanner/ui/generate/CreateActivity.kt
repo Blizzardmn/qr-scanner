@@ -1,4 +1,4 @@
-package com.tools.easy.scanner.ui
+package com.tools.easy.scanner.ui.generate
 
 import android.content.Context
 import android.content.Intent
@@ -42,25 +42,33 @@ class CreateActivity: BasicActivity<ActivityCreateBinding>() {
     }
     
     private fun doGenerate() {
-        ResultCreateActivity.openCreateResultPage(this, CreateEntity(
-            catType,
-            when (catType) {
-                //社交网站
-                Supports.catInstagram,
-                Supports.catFacebook,
-                Supports.catTwitter,
-                Supports.catYoutube,
-                Supports.catTiktok,
-                Supports.catWhatsapp -> formatSocialUrl(catType, binding.etInputName.text.toString())
+        ResultCreateActivity.openCreateResultPage(
+            this, CreateEntity(
+                catType,
+                when (catType) {
+                    //社交网站
+                    Supports.catInstagram,
+                    Supports.catFacebook,
+                    Supports.catTwitter,
+                    Supports.catYoutube,
+                    Supports.catTiktok,
+                    Supports.catWhatsapp -> formatSocialUrl(
+                        catType,
+                        binding.etInputName.text.toString()
+                    )
 
-                Supports.catWebsite,
-                Supports.catClipboard,
-                Supports.catText,
-                Supports.catWebsite -> formatContents(catType, binding.etInputTxt.text.toString())
+                    Supports.catWebsite,
+                    Supports.catClipboard,
+                    Supports.catText,
+                    Supports.catWebsite -> formatContents(
+                        catType,
+                        binding.etInputTxt.text.toString()
+                    )
 
-                else -> ""
-            }
-        ))
+                    else -> ""
+                }
+            )
+        )
         finish()
     }
 

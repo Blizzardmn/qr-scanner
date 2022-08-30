@@ -18,6 +18,7 @@ import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityScanBinding
 import com.tools.easy.scanner.datas.AppConfig
 import com.tools.easy.scanner.support.GpSupport
+import com.tools.easy.scanner.ui.generate.ResultScanActivity
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 

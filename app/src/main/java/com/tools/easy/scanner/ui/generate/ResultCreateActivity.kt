@@ -1,4 +1,4 @@
-package com.tools.easy.scanner.ui
+package com.tools.easy.scanner.ui.generate
 
 import android.Manifest
 import android.content.ContentValues
