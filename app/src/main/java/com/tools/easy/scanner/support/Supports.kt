@@ -1,5 +1,6 @@
 package com.tools.easy.scanner.support
 
+import android.content.Context
 import com.tools.easy.scanner.App
 import com.tools.easy.scanner.R
 
@@ -33,10 +34,68 @@ object Supports {
     val catYoutube: String = App.ins.getString(R.string.cat_youtube)
     val catTiktok: String = App.ins.getString(R.string.cat_tiktok)
     val catWhatsapp: String = App.ins.getString(R.string.cat_whatsapp)
-    /*val catProduct: String = App.ins.getString(R.string.cat_product)
-    val catCellphone: String = App.ins.getString(R.string.cat_cellphone)
+    val catProduct: String = App.ins.getString(R.string.cat_product)
+    /*val catCellphone: String = App.ins.getString(R.string.cat_cellphone)
     val catMessage: String = App.ins.getString(R.string.cat_message)
     val catContacts: String = App.ins.getString(R.string.cat_contacts)
     val catWifi: String = App.ins.getString(R.string.cat_wifi)*/
 
+    
+    data class ItemUri(val iconRes: Int, val category: String, val userName: String)
+
+    fun checkUri(context: Context, content: String): ItemUri? {
+        val splitFacebook = content.split(prefixFacebook)
+        val splitIns = content.split(prefixInstagram)
+        val splitTik = content.split(prefixTikTok)
+        val splitTwitter = content.split(prefixTwitter)
+        val splitWhatsapp = content.split(prefixWhatsApp)
+        val splitYoutube = content.split(prefixYoutube)
+
+        return when {
+            splitFacebook.size > 1 -> {
+                ItemUri(
+                    R.mipmap.ic_home_facebook,
+                    catFacebook,
+                    splitFacebook[1]
+                )
+            }
+            splitIns.size > 1 -> {
+                ItemUri(
+                    R.mipmap.ic_home_instagram,
+                    catInstagram,
+                    splitIns[1]
+                )
+            }
+            splitTik.size > 1 -> {
+                ItemUri(
+                    R.mipmap.ic_home_tiktok,
+                    catTiktok,
+                    splitTik[1]
+                )
+            }
+            splitTwitter.size > 1 -> {
+                ItemUri(
+                    R.mipmap.ic_home_twitter,
+                    catTwitter,
+                    splitTwitter[1]
+                )
+            }
+            splitWhatsapp.size > 1 -> {
+                ItemUri(
+                    R.mipmap.ic_home_whatsapp,
+                    catWhatsapp,
+                    splitWhatsapp[1]
+                )
+            }
+            splitYoutube.size > 1 -> {
+                ItemUri(
+                    R.mipmap.ic_home_youtube,
+                    catYoutube,
+                    splitYoutube[1]
+                )
+            }
+
+            else -> null
+        }
+    }
 }

@@ -134,7 +134,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
         } else {
             try {
                 toastLong("ScanResult: $parsedResult")
-                //ResultNewActivity.startResultActivity(this, parsedResult)
+                ResultScanActivity.open(this, parsedResult)
             } catch (e: Exception) {
             }
         }
