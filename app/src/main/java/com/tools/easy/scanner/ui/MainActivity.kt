@@ -12,6 +12,7 @@ import com.tools.easy.scanner.databinding.ActivityMainBinding
 import com.tools.easy.scanner.support.GpSupport
 import com.tools.easy.scanner.support.Supports
 import com.tools.easy.scanner.ui.adapter.CardAdapter
+import com.tools.easy.scanner.ui.other.HtmlActivity
 
 class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener {
 
@@ -50,7 +51,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener 
             }
 
             R.id.tv_privacy -> {
-
+                HtmlActivity.openPrivacy(this)
             }
         }
     }
