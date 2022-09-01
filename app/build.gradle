@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    // Add the following line:
+    id 'com.google.gms.google-services'  // Google Services plugin
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -54,6 +57,13 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
+
+    // Import the Firebase BoM
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    // Declare the dependency for the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-config'
 
 
     testImplementation 'junit:junit:4.13.2'
