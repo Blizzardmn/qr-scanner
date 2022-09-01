@@ -31,12 +31,10 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
     private var beepManager: BeepManager? = null
 
     companion object {
-        const val reqPermissionQr = 1001
-        const val reqPermissionStorage = 1002
-        const val reqPermissionReadContact = 1003
-        const val reqPermissionVibrate = 1004
+        const val reqPermissionQr = 2201
+        const val reqPermissionStorage = 2202
 
-        const val PHOTO_REQUEST_GALLERY = 1
+        const val photoReqGallery = 10
     }
 
     override fun vBinding(): ActivityScanBinding {
@@ -46,8 +44,8 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.back.setOnClickListener(this)
-        binding.imgPhotos.setOnClickListener(this)
-        binding.imgLights.setOnClickListener(this)
+        binding.photos.setOnClickListener(this)
+        binding.lights.setOnClickListener(this)
         initSettings()
         QRCodeUtils.setDebug(BuildConfig.DEBUG)
         binding.zxingview.setDelegate(this)
@@ -58,13 +56,13 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
         when (p0?.id) {
             R.id.back -> finish()
 
-            R.id.img_photos -> {
+            R.id.photos -> {
                 if (requestStoragePermissions()) {
                     openGallery()
                 }
             }
 
-            R.id.img_lights, R.id.img_light_open -> {
+            R.id.lights, R.id.light_open -> {
                 if (!isFlashLighting) {
                     binding.zxingview.openFlashlight()
                 } else {
@@ -72,11 +70,11 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
                 }
                 isFlashLighting = !isFlashLighting
                 if (isFlashLighting) {
-                    binding.imgLightOpen.visibility = View.VISIBLE
-                    binding.imgLights.visibility = View.INVISIBLE
+                    binding.lightOpen.visibility = View.VISIBLE
+                    binding.lights.visibility = View.INVISIBLE
                 } else {
-                    binding.imgLightOpen.visibility = View.INVISIBLE
-                    binding.imgLights.visibility = View.VISIBLE
+                    binding.lightOpen.visibility = View.INVISIBLE
+                    binding.lights.visibility = View.VISIBLE
                 }
             }
         }
@@ -219,7 +217,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         //开启一个带有返回值的activity,请求码为PHOTO_REQUEST_GALLERY
-        startActivityForResult(intent, PHOTO_REQUEST_GALLERY)
+        startActivityForResult(intent, photoReqGallery)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -235,7 +233,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
 
         when (requestCode) {
             //相册返回结果
-            PHOTO_REQUEST_GALLERY -> {
+            photoReqGallery -> {
                 binding.zxingview.decodeQRCode(this, dataUri)
             }
 

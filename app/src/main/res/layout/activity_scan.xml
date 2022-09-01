@@ -50,53 +50,53 @@
         app:tint="@color/white" />
 
     <ImageView
-        android:id="@+id/img_photos"
+        android:id="@+id/photos"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:onClick="onClick"
         android:scaleType="center"
         android:src="@mipmap/ic_photoes"
-        app:layout_constraintBottom_toTopOf="@id/layout_banner"
-        app:layout_constraintEnd_toStartOf="@id/img_lights"
+        app:layout_constraintBottom_toTopOf="@id/container"
+        app:layout_constraintEnd_toStartOf="@id/lights"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/img_lights"
+        android:id="@+id/lights"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="42dp"
         android:onClick="onClick"
         android:scaleType="center"
         android:src="@mipmap/ic_light_off"
-        app:layout_constraintBottom_toBottomOf="@id/img_photos"
+        app:layout_constraintBottom_toBottomOf="@id/photos"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/img_photos" />
+        app:layout_constraintStart_toEndOf="@id/photos" />
 
     <ImageView
-        android:id="@+id/img_light_open"
+        android:id="@+id/light_open"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:onClick="onClick"
         android:scaleType="center"
         android:src="@mipmap/ic_light_off"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/img_lights"
-        app:layout_constraintEnd_toEndOf="@id/img_lights"
-        app:layout_constraintStart_toStartOf="@id/img_lights"
-        app:layout_constraintTop_toTopOf="@id/img_lights"
+        app:layout_constraintBottom_toBottomOf="@id/lights"
+        app:layout_constraintEnd_toEndOf="@id/lights"
+        app:layout_constraintStart_toStartOf="@id/lights"
+        app:layout_constraintTop_toTopOf="@id/lights"
         app:tint="#008000" />
 
     <View
         android:layout_width="1dp"
         android:layout_height="36dp"
         android:background="#80FFFFFF"
-        app:layout_constraintEnd_toStartOf="@id/img_lights"
-        app:layout_constraintStart_toEndOf="@id/img_photos"
-        app:layout_constraintTop_toTopOf="@id/img_photos" />
+        app:layout_constraintEnd_toStartOf="@id/lights"
+        app:layout_constraintStart_toEndOf="@id/photos"
+        app:layout_constraintTop_toTopOf="@id/photos" />
 
     <FrameLayout
-        android:id="@+id/layout_banner"
+        android:id="@+id/container"
         android:layout_width="0dp"
         android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
