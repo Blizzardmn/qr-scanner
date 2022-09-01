@@ -43,5 +43,6 @@
         android:text="Private policy"
         android:textColor="#333333"
         android:textSize="14sp"
+        android:visibility="gone"
         tools:ignore="HardcodedText" />
 </LinearLayout>
