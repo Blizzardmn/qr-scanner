@@ -23,7 +23,7 @@ class HtmlActivity: BasicActivity<ActivityHtmlBinding>() {
     companion object {
         fun openPrivacy(activity: Activity) {
             val intent = Intent(activity, HtmlActivity::class.java)
-            intent.putExtra("html", "")
+            intent.putExtra("html", "https://sites.google.com/view/privacypolicy-qrscaneer/")
             activity.startActivity(intent)
         }
     }
