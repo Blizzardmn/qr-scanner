@@ -8,7 +8,7 @@ plugins {
 
 android {
     compileSdk 31
-
+    //qr5678..
     defaultConfig {
         applicationId "com.easy.qrcode.scan.android"
         minSdk 23
