@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">QR Scanner</string>
+    <string name="facebook_app_id" translatable="false">1209539793164583</string>
+
     <string name="cat_clipboard" translatable="false">Clipboard</string>
     <string name="cat_email" translatable="false">Email</string>
     <string name="cat_website" translatable="false">Website</string>
