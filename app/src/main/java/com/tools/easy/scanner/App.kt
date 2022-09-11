@@ -6,6 +6,7 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.ads.AdActivity
+import com.google.android.gms.ads.MobileAds
 import com.tools.easy.scanner.advertise.AdLoader
 import com.tools.easy.scanner.datas.RemoteConfig
 import com.tools.easy.scanner.ui.OpenActivity
@@ -29,6 +30,7 @@ class App: Application() {
         super.onCreate()
         ins = this
 
+        MobileAds.initialize(this)
         RemoteConfig.ins.fetchAndActivate {
             AdLoader.parseRemoteConfig()
         }

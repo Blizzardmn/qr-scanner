@@ -119,15 +119,15 @@ object AdLoader: AdmobLoader(), CoroutineScope by MainScope() {
 
         val removeAt = configIds.removeAt(0)
         when (removeAt.type) {
-            "o" -> loadOpen(ctx, adPos, removeAt) {
+            "opn" -> loadOpen(ctx, adPos, removeAt) {
                 checkIt(it)
             }
 
-            "i" -> loadInterstitial(ctx, adPos, removeAt) {
+            "ins" -> loadInterstitial(ctx, adPos, removeAt) {
                 checkIt(it)
             }
 
-            "n" -> loadNative(ctx, adPos, removeAt) {
+            "nav" -> loadNative(ctx, adPos, removeAt) {
                 checkIt(it)
             }
 
@@ -188,5 +188,5 @@ object AdLoader: AdmobLoader(), CoroutineScope by MainScope() {
         }
     }
 
-    private const val local = ""
+    private const val local = "{\"open\":[{\"id\":\"ca-app-pub-3940256099942544/3419835294\",\"tp\":\"opn\",\"wt\":3},{\"id\":\"ca-app-pub-3940256099942544/1033173712\",\"tp\":\"ins\",\"wt\":1}],\"ins_process\":[{\"id\":\"ca-app-pub-3940256099942544/1033173712\",\"tp\":\"ins\",\"wt\":3}],\"ins_back\":[{\"id\":\"ca-app-pub-3940256099942544/1033173712\",\"tp\":\"ins\",\"wt\":3}],\"nav_main\":[{\"id\":\"ca-app-pub-3940256099942544/2247696110\",\"tp\":\"nav\",\"wt\":3}],\"nav_result\":[{\"id\":\"ca-app-pub-3940256099942544/2247696110\",\"tp\":\"nav\",\"wt\":3}]}"
 }
