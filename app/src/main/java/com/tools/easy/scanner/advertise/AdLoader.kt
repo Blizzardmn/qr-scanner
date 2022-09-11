@@ -145,7 +145,7 @@ object AdLoader: AdmobLoader(), CoroutineScope by MainScope() {
         dealtParse(remoteAdConfig)
     }
 
-    fun parseLocalConfig() {
+    private fun parseLocalConfig() {
         dealtParse(local)
     }
 
@@ -188,5 +188,5 @@ object AdLoader: AdmobLoader(), CoroutineScope by MainScope() {
         }
     }
 
-    private const val local = "{\"open\":[{\"id\":\"ca-app-pub-3940256099942544/3419835294\",\"tp\":\"opn\",\"wt\":3},{\"id\":\"ca-app-pub-3940256099942544/1033173712\",\"tp\":\"ins\",\"wt\":1}],\"ins_process\":[{\"id\":\"ca-app-pub-3940256099942544/1033173712\",\"tp\":\"ins\",\"wt\":3}],\"ins_back\":[{\"id\":\"ca-app-pub-3940256099942544/1033173712\",\"tp\":\"ins\",\"wt\":3}],\"nav_main\":[{\"id\":\"ca-app-pub-3940256099942544/2247696110\",\"tp\":\"nav\",\"wt\":3}],\"nav_result\":[{\"id\":\"ca-app-pub-3940256099942544/2247696110\",\"tp\":\"nav\",\"wt\":3}]}"
+    private const val local = "{\"open\":[{\"id\":\"ca-app-pub-1903241164241473/8223311936\",\"tp\":\"opn\",\"wt\":3}],\"ins_process\":[{\"id\":\"ca-app-pub-1903241164241473/7721297796\",\"tp\":\"ins\",\"wt\":3}],\"nav_main\":[{\"id\":\"ca-app-pub-1903241164241473/4663340873\",\"tp\":\"nav\",\"wt\":3}],\"nav_result\":[{\"id\":\"ca-app-pub-1903241164241473/6408216128\",\"tp\":\"nav\",\"wt\":3}]}"
 }

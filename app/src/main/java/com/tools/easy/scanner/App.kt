@@ -23,7 +23,7 @@ class App: Application() {
     companion object {
         lateinit var ins: App
         var isFilter = false
-        const val isDebug = true
+        const val isDebug = false
     }
 
     override fun onCreate() {
