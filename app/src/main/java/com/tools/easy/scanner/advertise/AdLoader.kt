@@ -23,11 +23,6 @@ import kotlin.collections.HashMap
 object AdLoader: AdmobLoader(), CoroutineScope by MainScope() {
 
     private val cacheAds = HashMap<String, ArrayList<BaseAd>>()
-    private val adPosOpen = AdPos("open")
-    private val adPosProcess = AdPos("ins_process")
-    private val adPosMain = AdPos("nav_main")
-    private val adPosResult = AdPos("nav_result")
-    private val adPosBack = AdPos("ins_back")
 
     private val comparator = object : Comparator<BaseAd> {
         override fun compare(o1: BaseAd?, o2: BaseAd?): Int {
@@ -180,11 +175,11 @@ object AdLoader: AdmobLoader(), CoroutineScope by MainScope() {
             /*dailyShownUpper = jsonObject.optInt("iTran_zks", 30)
             dailyClickUpper = jsonObject.optInt("iTran_ydj", 10)*/
 
-            parsePosition(adPosOpen, jsonObject.optJSONArray(adPosOpen.name))
-            parsePosition(adPosProcess, jsonObject.optJSONArray(adPosProcess.name))
-            parsePosition(adPosMain, jsonObject.optJSONArray(adPosMain.name))
-            parsePosition(adPosResult, jsonObject.optJSONArray(adPosResult.name))
-            parsePosition(adPosBack, jsonObject.optJSONArray(adPosBack.name))
+            parsePosition(AdConst.adOpen, jsonObject.optJSONArray(AdConst.adOpen.name))
+            parsePosition(AdConst.adProcess, jsonObject.optJSONArray(AdConst.adProcess.name))
+            parsePosition(AdConst.adMain, jsonObject.optJSONArray(AdConst.adMain.name))
+            parsePosition(AdConst.adResult, jsonObject.optJSONArray(AdConst.adResult.name))
+            parsePosition(AdConst.adBack, jsonObject.optJSONArray(AdConst.adBack.name))
         } catch (e: Exception) {}
 
         synchronized(adsConfig) {

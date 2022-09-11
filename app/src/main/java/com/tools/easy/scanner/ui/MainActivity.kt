@@ -6,7 +6,11 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.GridLayoutManager
+import com.tools.easy.scanner.App
 import com.tools.easy.scanner.R
+import com.tools.easy.scanner.advertise.AdConst
+import com.tools.easy.scanner.advertise.AdLoader
+import com.tools.easy.scanner.advertise.base.*
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityMainBinding
 import com.tools.easy.scanner.support.GpSupport
@@ -14,6 +18,7 @@ import com.tools.easy.scanner.support.Supports
 import com.tools.easy.scanner.ui.adapter.CardAdapter
 import com.tools.easy.scanner.ui.generate.CreateActivity
 import com.tools.easy.scanner.ui.other.HtmlActivity
+import java.util.concurrent.atomic.AtomicBoolean
 
 class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener {
 
@@ -57,9 +62,19 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener 
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadAd()
+    }
+
     override fun onBackPressed() {
         if (closeDrawer()) return
         super.onBackPressed()
+    }
+
+    override fun onDestroy() {
+        nativeAd?.onDestroy()
+        super.onDestroy()
     }
 
     private fun closeDrawer(): Boolean {
@@ -68,6 +83,80 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener 
             return true
         }
         return false
+    }
+
+    //最后一次展示home_native的时间
+    private var lastShowTime = 0L
+    //原生廣告被點擊了
+    private var isNativeClicked = false
+    //首頁原生
+    private var nativeAd: BaseNative? = null
+    private fun loadAd() {
+        if (atomicBackAd.getAndSet(false)) {
+            AdLoader.loadAd(App.ins, AdConst.adBack, object : AdsListener() {
+                override fun onAdLoaded(ad: BaseAd) {
+                    if (ad !is BaseInterstitial) {
+                        return
+                    }
+                    ad.show(this@MainActivity)
+                }
+            }, justCache = true)
+        }
+        AdLoader.preloadAd(AdConst.adProcess)
+        AdLoader.preloadAd(AdConst.adResult)
+        AdLoader.preloadAd(AdConst.adBack)
+        //nativeAd
+        //1 minutes
+        if ((System.currentTimeMillis() - lastShowTime > 60_000L)
+            || isNativeClicked) {
+            isNativeClicked = false
+            AdLoader.loadAd(App.ins, AdConst.adMain, object : AdsListener(){
+                override fun onAdLoaded(ad: BaseAd) {
+                    when (ad) {
+                        is BaseNative -> {
+                            nativeAd?.onDestroy()
+                            nativeAd = ad
+                            onNativeLoaded(ad)
+                        }
+
+                        else -> return
+                    }
+
+                    lastShowTime = System.currentTimeMillis()
+                }
+
+                override fun onAdClick() {
+                    isNativeClicked = true
+                }
+
+                override fun onAdError(err: String?) {
+                    onNativeLoaded(null)
+                }
+            })
+        }
+    }
+
+    private fun onNativeLoaded(ad: BaseNative?) {
+        if (ad !is AdmobNative) {
+            binding.main.adHold.visibility = View.VISIBLE
+            val adContainer = binding.main.adMain.root
+            adContainer.visibility = View.GONE
+            return
+        }
+
+        binding.main.adHold.visibility = View.GONE
+        binding.main.adMain.root.apply {
+            visibility = View.VISIBLE
+
+            ad.showIcon(this, findViewById(R.id.ad_icon))
+            ad.showImage(this, findViewById(R.id.ad_img))
+            ad.showTitle(this, findViewById(R.id.ad_title))
+            ad.showBody(this, findViewById(R.id.ad_desc))
+            ad.showCta(this, findViewById(R.id.ad_action))
+            ad.register(this)
+        }
+
+        AdLoader.preloadAd(AdConst.adMain)
     }
 
     private fun initList() {
@@ -91,5 +180,9 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener 
         adapter.setOnClick {
             CreateActivity.openCreatePage(this@MainActivity, it.name)
         }
+    }
+
+    companion object {
+        val atomicBackAd = AtomicBoolean(false)
     }
 }
