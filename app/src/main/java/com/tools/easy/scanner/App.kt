@@ -42,10 +42,10 @@ class App: Application() {
     private var delayJob: Job? = null
     private var bHotLoading = false
     //屏蔽本次热启动
-    private var blockHot = false
+    private var blockOne = false
 
-    fun blockOnceHot() {
-        blockHot = true
+    fun blockOne() {
+        blockOne = true
     }
 
     fun isAppForeground(): Boolean {
@@ -62,13 +62,12 @@ class App: Application() {
             if (nForeActivity++ == 0) {
                 delayJob?.cancel()
                 if (activity !is AdActivity
-                    && activity !is OpenActivity
-                ) {
-                    if (!blockHot && bHotLoading) {
+                    && activity !is OpenActivity) {
+                    if (!blockOne && bHotLoading) {
                         OpenActivity.restart(activity)
                         //needFreshNav = false
                     }
-                    blockHot = false
+                    blockOne = false
                     bHotLoading = false
                 }
             }
@@ -82,7 +81,7 @@ class App: Application() {
             Log.i("ActivityLife", "onActivityStopped: $activity")
             --nForeActivity
             delayJob = GlobalScope.launch {
-                delay(1100L)
+                delay(1800L)
                 bHotLoading = true
 
                 if (activity is AdActivity || (activity is OpenActivity && nForeActivity <= 0)) {

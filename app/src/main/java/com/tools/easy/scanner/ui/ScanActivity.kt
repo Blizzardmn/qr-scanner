@@ -207,6 +207,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
     }
 
     private fun openGallery() {
+        App.ins.blockOne()
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         //开启一个带有返回值的activity,请求码为PHOTO_REQUEST_GALLERY
