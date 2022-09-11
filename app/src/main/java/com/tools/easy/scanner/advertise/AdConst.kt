@@ -9,7 +9,7 @@ import com.tools.easy.scanner.advertise.base.AdPos
 object AdConst {
 
     val adOpen = AdPos("open")
-    val adProcess = AdPos("ins_process")
+    val adIns = AdPos("ins_process")
     val adMain = AdPos("nav_main")
     val adResult = AdPos("nav_result")
     val adBack = AdPos("ins_back")

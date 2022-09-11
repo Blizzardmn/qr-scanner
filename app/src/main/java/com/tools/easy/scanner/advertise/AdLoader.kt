@@ -176,7 +176,7 @@ object AdLoader: AdmobLoader(), CoroutineScope by MainScope() {
             dailyClickUpper = jsonObject.optInt("iTran_ydj", 10)*/
 
             parsePosition(AdConst.adOpen, jsonObject.optJSONArray(AdConst.adOpen.name))
-            parsePosition(AdConst.adProcess, jsonObject.optJSONArray(AdConst.adProcess.name))
+            parsePosition(AdConst.adIns, jsonObject.optJSONArray(AdConst.adIns.name))
             parsePosition(AdConst.adMain, jsonObject.optJSONArray(AdConst.adMain.name))
             parsePosition(AdConst.adResult, jsonObject.optJSONArray(AdConst.adResult.name))
             parsePosition(AdConst.adBack, jsonObject.optJSONArray(AdConst.adBack.name))

@@ -49,7 +49,7 @@ class OpenActivity: BasicActivity<ActivityOpenBinding>() {
         isAdShown = false
         lifecycleScope.launch {
             AdLoader.preloadAd(AdConst.adMain)
-            AdLoader.preloadAd(AdConst.adProcess)
+            AdLoader.preloadAd(AdConst.adIns)
             delay(600L)
 
             AdLoader.loadAd(App.ins, AdConst.adOpen, adListener)

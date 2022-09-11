@@ -9,8 +9,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import com.google.zxing.client.result.ParsedResultType
 import com.tools.easy.scanner.App
+import com.tools.easy.scanner.R
+import com.tools.easy.scanner.advertise.AdConst
+import com.tools.easy.scanner.advertise.AdLoader
+import com.tools.easy.scanner.advertise.base.AdmobNative
+import com.tools.easy.scanner.advertise.base.AdsListener
+import com.tools.easy.scanner.advertise.base.BaseAd
+import com.tools.easy.scanner.advertise.base.BaseNative
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityCreateResultBinding
 import com.tools.easy.scanner.support.CodeBuilder
@@ -61,6 +69,7 @@ class ResultCreateActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPe
             intent.putExtra(Intent.EXTRA_STREAM, uri)
             startActivity(Intent.createChooser(intent, "title"))
         }
+        showAd()
     }
 
     private fun syncLoadParams(action: () -> Unit) {
@@ -152,6 +161,49 @@ class ResultCreateActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPe
     override fun onDestroy() {
         super.onDestroy()
         mBitmap?.recycle()
+        nativeAd?.onDestroy()
+    }
+
+    private var nativeAd: BaseNative? = null
+    private fun showAd() {
+        AdLoader.loadAd(App.ins, AdConst.adResult, object : AdsListener(){
+            override fun onAdLoaded(ad: BaseAd) {
+                when (ad) {
+                    is BaseNative -> {
+                        nativeAd?.onDestroy()
+                        nativeAd = ad
+                        onNativeLoaded(ad)
+                    }
+
+                    else -> return
+                }
+            }
+
+            override fun onAdError(err: String?) {
+                onNativeLoaded(null)
+            }
+        })
+    }
+
+    private fun onNativeLoaded(ad: BaseNative?) {
+        if (ad !is AdmobNative) {
+            binding.adHold.visibility = View.VISIBLE
+            val adContainer = binding.adMain.root
+            adContainer.visibility = View.GONE
+            return
+        }
+
+        binding.adHold.visibility = View.GONE
+        binding.adMain.root.apply {
+            visibility = View.VISIBLE
+
+            ad.showIcon(this, findViewById(R.id.ad_icon))
+            ad.showImage(this, findViewById(R.id.ad_img))
+            ad.showTitle(this, findViewById(R.id.ad_title))
+            ad.showBody(this, findViewById(R.id.ad_desc))
+            ad.showCta(this, findViewById(R.id.ad_action))
+            ad.register(this)
+        }
     }
 
     companion object {

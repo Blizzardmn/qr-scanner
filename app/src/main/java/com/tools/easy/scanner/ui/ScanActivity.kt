@@ -14,6 +14,9 @@ import com.tools.easy.QRCodeView
 import com.tools.easy.scanner.App
 import com.tools.easy.scanner.BuildConfig
 import com.tools.easy.scanner.R
+import com.tools.easy.scanner.advertise.AdConst
+import com.tools.easy.scanner.advertise.AdLoader
+import com.tools.easy.scanner.advertise.base.*
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityScanBinding
 import com.tools.easy.scanner.datas.AppConfig
@@ -49,6 +52,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
         initSettings()
         QRCodeUtils.setDebug(BuildConfig.DEBUG)
         binding.zxingview.setDelegate(this)
+        loadAd()
     }
 
     private var isFlashLighting = false
@@ -110,6 +114,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
 
     override fun onDestroy() {
         binding.zxingview.onDestroy()
+        nativeAd?.onDestroy()
         super.onDestroy()
     }
 
@@ -125,19 +130,7 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
     override fun onScanQRCodeSuccess(result: BarcodeResult?) {
         if (result == null) return
         if (result.result == null) return
-        beepManager?.playBeepSoundAndVibrate()
-        val parsedResult = ResultParser.parseResult(result.result)
-        if (parsedResult.type == ParsedResultType.URI && AppConfig.ins.isBrowserAuto
-            /*&& Supports.checkSns(this, parsedResult.displayResult) == null*/
-        ) {
-            GpSupport.openUrlByBrowser(parsedResult.displayResult)
-        } else {
-            try {
-                //toastLong("ScanResult: $parsedResult")
-                ResultScanActivity.open(this, parsedResult)
-            } catch (e: Exception) {
-            }
-        }
+        showAd(result)
 
         /*GlobalScope.launch {
             ScanDbHelper().insertItem(
@@ -242,6 +235,95 @@ class ScanActivity: BasicActivity<ActivityScanBinding>(), View.OnClickListener,
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun showAd(result: BarcodeResult) {
+        AdLoader.loadAd(this, AdConst.adIns, object :AdsListener() {
+            override fun onAdLoaded(ad: BaseAd) {
+                if (isActivityPaused()) {
+                    AdLoader.add2cache(AdConst.adIns, ad)
+                    return
+                }
+                if (ad !is BaseInterstitial) {
+                    showResult(result)
+                    return
+                }
+                if (!ad.show(this@ScanActivity)) {
+                    showResult(result)
+                }
+            }
+
+            override fun onAdDismiss() {
+                if (!App.ins.isAppForeground()) return
+                showResult(result)
+            }
+
+            override fun onAdError(err: String?) {
+                showResult(result)
+            }
+        }, justCache = true)
+    }
+
+    private fun showResult(result: BarcodeResult) {
+        beepManager?.playBeepSoundAndVibrate()
+        val parsedResult = ResultParser.parseResult(result.result)
+        if (parsedResult.type == ParsedResultType.URI && AppConfig.ins.isBrowserAuto
+        /*&& Supports.checkSns(this, parsedResult.displayResult) == null*/
+        ) {
+            GpSupport.openUrlByBrowser(parsedResult.displayResult)
+        } else {
+            try {
+                //toastLong("ScanResult: $parsedResult")
+                ResultScanActivity.open(this, parsedResult)
+            } catch (e: Exception) {
+            }
+        }
+    }
+
+    private var nativeAd: BaseNative? = null
+    private fun loadAd() {
+        AdLoader.preloadAd(AdConst.adIns)
+        AdLoader.preloadAd(AdConst.adResult)
+        AdLoader.loadAd(App.ins, AdConst.adMain, object : AdsListener(){
+            override fun onAdLoaded(ad: BaseAd) {
+                when (ad) {
+                    is BaseNative -> {
+                        nativeAd?.onDestroy()
+                        nativeAd = ad
+                        onNativeLoaded(ad)
+                    }
+
+                    else -> return
+                }
+            }
+
+            override fun onAdError(err: String?) {
+                onNativeLoaded(null)
+            }
+        })
+    }
+
+    private fun onNativeLoaded(ad: BaseNative?) {
+        if (ad !is AdmobNative) {
+            binding.adHold.visibility = View.VISIBLE
+            val adContainer = binding.adMain.root
+            adContainer.visibility = View.GONE
+            return
+        }
+
+        binding.adHold.visibility = View.GONE
+        binding.adMain.root.apply {
+            visibility = View.VISIBLE
+
+            ad.showIcon(this, findViewById(R.id.ad_icon))
+            ad.showImage(this, findViewById(R.id.ad_img))
+            ad.showTitle(this, findViewById(R.id.ad_title))
+            ad.showBody(this, findViewById(R.id.ad_desc))
+            ad.showCta(this, findViewById(R.id.ad_action))
+            ad.register(this)
+        }
+
+        AdLoader.preloadAd(AdConst.adMain)
     }
 
 

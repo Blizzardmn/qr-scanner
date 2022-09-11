@@ -102,7 +102,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener 
                 }
             }, justCache = true)
         }
-        AdLoader.preloadAd(AdConst.adProcess)
+        AdLoader.preloadAd(AdConst.adIns)
         AdLoader.preloadAd(AdConst.adResult)
         AdLoader.preloadAd(AdConst.adBack)
         //nativeAd
