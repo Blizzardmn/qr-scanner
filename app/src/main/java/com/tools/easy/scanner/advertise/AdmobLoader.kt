@@ -63,7 +63,7 @@ open class AdmobLoader {
                 load.invoke(admobNative)
             }
             .withAdListener(admobNative.adListener)
-            .withNativeAdOptions(NativeAdOptions.Builder().setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_LEFT).build())
+            .withNativeAdOptions(NativeAdOptions.Builder().setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT).build())
             .build()
             .loadAd(AdRequest.Builder().build())
     }
