@@ -3,6 +3,8 @@ package com.tools.easy.scanner
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import com.tools.easy.scanner.advertise.AdLoader
+import com.tools.easy.scanner.datas.RemoteConfig
 
 /**
  *  description :
@@ -12,12 +14,16 @@ class App: Application() {
     companion object {
         lateinit var ins: App
         var isFilter = false
+        const val isDebug = true
     }
 
     override fun onCreate() {
         super.onCreate()
         ins = this
 
+        RemoteConfig.ins.fetchAndActivate {
+            AdLoader.parseRemoteConfig()
+        }
         registerActivityLifecycleCallbacks(ActivityLife())
     }
 
