@@ -15,7 +15,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.google.zxing.client.result.*
+import com.tools.easy.scanner.App
 import com.tools.easy.scanner.R
+import com.tools.easy.scanner.advertise.AdConst
+import com.tools.easy.scanner.advertise.AdLoader
+import com.tools.easy.scanner.advertise.base.AdmobNative
+import com.tools.easy.scanner.advertise.base.AdsListener
+import com.tools.easy.scanner.advertise.base.BaseAd
+import com.tools.easy.scanner.advertise.base.BaseNative
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityResultBinding
 import com.tools.easy.scanner.support.GpSupport
@@ -48,6 +55,7 @@ class ResultScanActivity: BasicActivity<ActivityResultBinding>() {
         super.onCreate(savedInstanceState)
         binding.back.setOnClickListener { finish() }
         initResult()
+        showAd()
     }
 
     private fun initCopy(content: String) {
@@ -254,5 +262,52 @@ class ResultScanActivity: BasicActivity<ActivityResultBinding>() {
             .load(iconRes)
             .apply(RequestOptions.bitmapTransform(CircleCrop()))
             .into(binding.imgCat)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        nativeAd?.onDestroy()
+    }
+
+    private var nativeAd: BaseNative? = null
+    private fun showAd() {
+        AdLoader.loadAd(App.ins, AdConst.adResult, object : AdsListener(){
+            override fun onAdLoaded(ad: BaseAd) {
+                when (ad) {
+                    is BaseNative -> {
+                        nativeAd?.onDestroy()
+                        nativeAd = ad
+                        onNativeLoaded(ad)
+                    }
+
+                    else -> return
+                }
+            }
+
+            override fun onAdError(err: String?) {
+                onNativeLoaded(null)
+            }
+        })
+    }
+
+    private fun onNativeLoaded(ad: BaseNative?) {
+        if (ad !is AdmobNative) {
+            binding.adHold.visibility = View.VISIBLE
+            val adContainer = binding.adMain.root
+            adContainer.visibility = View.GONE
+            return
+        }
+
+        binding.adHold.visibility = View.GONE
+        binding.adMain.root.apply {
+            visibility = View.VISIBLE
+
+            ad.showIcon(this, findViewById(R.id.ad_icon))
+            ad.showImage(this, findViewById(R.id.ad_img))
+            ad.showTitle(this, findViewById(R.id.ad_title))
+            ad.showBody(this, findViewById(R.id.ad_desc))
+            ad.showCta(this, findViewById(R.id.ad_action))
+            ad.register(this)
+        }
     }
 }

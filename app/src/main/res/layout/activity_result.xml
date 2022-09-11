@@ -151,4 +151,23 @@
         app:layout_constraintTop_toTopOf="@id/tv_browser"
         tools:ignore="HardcodedText" />
 
+    <include
+        android:id="@+id/ad_main"
+        layout="@layout/ad_native_large"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <View
+        android:id="@+id/ad_hold"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="10dp"
+        android:background="@mipmap/nav_ad_holder"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

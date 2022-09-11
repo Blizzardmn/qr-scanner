@@ -16,6 +16,13 @@ abstract class BasicActivity<T: ViewBinding>: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        resources.displayMetrics.apply {
+            val finalHeight = heightPixels / 750f
+            density = finalHeight
+            scaledDensity = finalHeight
+            densityDpi = (160 * finalHeight).toInt()
+        }
+
         binding = vBinding()
         setContentView(binding.root)
     }
