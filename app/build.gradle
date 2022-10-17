@@ -42,6 +42,7 @@ android {
 
 dependencies {
     implementation project(path: ':mylib')
+    implementation project(path: ':core')
 
     implementation("org.greenrobot:eventbus:3.3.1")
     implementation 'com.airbnb.android:lottie:4.1.0'
@@ -68,6 +69,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-config'
 
+    //Fix PendingIntent bug
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

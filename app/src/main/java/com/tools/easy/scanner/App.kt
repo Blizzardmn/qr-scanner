@@ -2,18 +2,25 @@ package com.tools.easy.scanner
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.Application
+import android.content.Context
 import android.os.Bundle
+import android.os.Process
 import android.util.Log
+import com.github.shadowsocks.Core
 import com.google.android.gms.ads.AdActivity
 import com.google.android.gms.ads.MobileAds
+import com.google.firebase.FirebaseApp
 import com.tools.easy.scanner.advertise.AdLoader
 import com.tools.easy.scanner.datas.RemoteConfig
+import com.tools.easy.scanner.ui.MainActivity
 import com.tools.easy.scanner.ui.OpenActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 /**
  *  description :
@@ -29,12 +36,32 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         ins = this
+        try {
+            FirebaseApp.initializeApp(this)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        Core.init(this, MainActivity::class)
+
+        if (getProcessName(this) != packageName) return
 
         MobileAds.initialize(this)
         RemoteConfig.ins.fetchAndActivate {
             AdLoader.parseRemoteConfig()
         }
         registerActivityLifecycleCallbacks(ActivityLife())
+    }
+
+   private fun getProcessName(cxt: Context): String? {
+        val pid = Process.myPid()
+        val am = cxt.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val runningApps = am.runningAppProcesses ?: return null
+        for (procInfo in runningApps) {
+            if (procInfo.pid == pid) {
+                return procInfo.processName
+            }
+        }
+        return null
     }
 
     //存在的前台Activity 数量
