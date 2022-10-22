@@ -23,6 +23,7 @@ import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityCreateResultBinding
 import com.tools.easy.scanner.support.CodeBuilder
 import com.tools.easy.scanner.support.CreateEntity
+import com.tools.easy.scanner.ui.home.MainActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -54,7 +55,7 @@ class ResultCreateActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPe
                 binding.imgCode.setImageBitmap(mBitmap)
             }
         }
-        binding.back.setOnClickListener { finish() }
+        binding.back.setOnClickListener { onBackPressed() }
         binding.tvSave.setOnClickListener {
             if (requestStoragePermissions()) {
                 doSaveBitmap()
@@ -70,6 +71,11 @@ class ResultCreateActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPe
             startActivity(Intent.createChooser(intent, "title"))
         }
         showAd()
+    }
+
+    override fun onBackPressed() {
+        MainActivity.atomicBackAd.set(true)
+        super.onBackPressed()
     }
 
     private fun syncLoadParams(action: () -> Unit) {

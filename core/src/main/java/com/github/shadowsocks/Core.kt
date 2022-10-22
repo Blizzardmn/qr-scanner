@@ -39,6 +39,7 @@ import androidx.core.content.getSystemService
 import androidx.work.Configuration
 import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.aidl.ShadowsocksConnection
+import com.github.shadowsocks.bg.BaseService
 import com.github.shadowsocks.core.BuildConfig
 import com.github.shadowsocks.core.R
 import com.github.shadowsocks.database.Profile
@@ -82,6 +83,11 @@ object Core : Configuration.Provider {
         get() = ProfileManager.getProfile(DataStore.profileId).let {
             if (it == null) emptyList() else listOfNotNull(it.id, it.udpFallback)
         }
+
+    var curState = BaseService.State.Idle
+
+    fun isConnected(): Boolean = curState == BaseService.State.Connected
+    fun isConnecting(): Boolean = curState == BaseService.State.Connecting || curState == BaseService.State.Stopping
 
     var currentProfile: ProfileManager.ExpandedProfile? = null
         set(value) {

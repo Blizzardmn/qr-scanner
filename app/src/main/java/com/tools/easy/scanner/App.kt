@@ -14,7 +14,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 import com.tools.easy.scanner.advertise.AdLoader
 import com.tools.easy.scanner.datas.RemoteConfig
-import com.tools.easy.scanner.ui.MainActivity
+import com.tools.easy.scanner.ui.home.MainActivity
 import com.tools.easy.scanner.ui.OpenActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job

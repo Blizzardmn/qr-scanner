@@ -14,6 +14,7 @@ import com.tools.easy.scanner.advertise.base.BaseAd
 import com.tools.easy.scanner.advertise.base.BaseInterstitial
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityOpenBinding
+import com.tools.easy.scanner.ui.home.MainActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean

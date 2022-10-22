@@ -27,6 +27,7 @@ import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityResultBinding
 import com.tools.easy.scanner.support.GpSupport
 import com.tools.easy.scanner.support.Supports
+import com.tools.easy.scanner.ui.home.MainActivity
 import java.util.*
 
 /**
@@ -53,9 +54,14 @@ class ResultScanActivity: BasicActivity<ActivityResultBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding.back.setOnClickListener { finish() }
+        binding.back.setOnClickListener { onBackPressed() }
         initResult()
         showAd()
+    }
+
+    override fun onBackPressed() {
+        MainActivity.atomicBackAd.set(true)
+        super.onBackPressed()
     }
 
     private fun initCopy(content: String) {

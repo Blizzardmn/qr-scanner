@@ -38,4 +38,20 @@ class AppConfig {
         set(value) {
             sp.edit().putBoolean("is_browser_auto", value).apply()
         }
+
+    var isFirstInApp: Boolean
+        get() {
+            return sp.getBoolean("is_firstin_app", true)
+        }
+        set(value) {
+            sp.edit().putBoolean("is_firstin_app", value).apply()
+        }
+
+    var installReferer: String?
+        get() {
+            return sp.getString("install_refer", "")
+        }
+        set(value) {
+            sp.edit().putString("install_refer", value).apply()
+        }
 }

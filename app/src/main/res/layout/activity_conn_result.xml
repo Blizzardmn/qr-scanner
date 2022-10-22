@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp"
+        android:background="#F9F9F9" />
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="58dp"
+        android:layout_height="56dp"
+        android:onClick="onClick"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Report"
+        android:textColor="#333333"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/back"
+        tools:ignore="HardcodedText" />
+
+    <ImageView
+        android:id="@+id/img_type"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:layout_marginTop="32dp"
+        android:src="@mipmap/ic_connected"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back" />
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Connected now"
+        android:textColor="#32B16C"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_type" />
+
+    <View
+        android:id="@+id/bg_location"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/bg_ffffff_r8_elva"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_tip" />
+
+    <ImageView
+        android:id="@+id/img_flag"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/bg_location"
+        app:layout_constraintStart_toStartOf="@id/bg_location"
+        app:layout_constraintTop_toTopOf="@id/bg_location" />
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="United States - New York"
+        android:textColor="#1A1A1A"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/bg_location"
+        app:layout_constraintStart_toEndOf="@id/img_flag"
+        app:layout_constraintTop_toTopOf="@id/bg_location" />
+
+    <View
+        android:id="@+id/img_scan"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@mipmap/result_scan"
+        android:onClick="onClick"
+        app:layout_constraintEnd_toEndOf="@id/bg_location"
+        app:layout_constraintStart_toStartOf="@id/bg_location"
+        app:layout_constraintTop_toBottomOf="@id/bg_location" />
+
+    <View
+        android:id="@+id/bg_scan"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@drawable/bg_ffffff_rb8"
+        app:layout_constraintEnd_toEndOf="@id/bg_location"
+        app:layout_constraintStart_toStartOf="@id/bg_location"
+        app:layout_constraintTop_toBottomOf="@id/img_scan" />
+
+    <Button
+        android:id="@+id/btn_scan"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginHorizontal="40dp"
+        android:background="@drawable/bg_814cff_r21"
+        android:onClick="onClick"
+        android:text="Scan now"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/bg_scan"
+        app:layout_constraintEnd_toEndOf="@id/bg_scan"
+        app:layout_constraintStart_toStartOf="@id/bg_scan"
+        app:layout_constraintTop_toTopOf="@id/bg_scan"
+        tools:ignore="HardcodedText" />
+
+    <include
+        android:id="@+id/ad_main"
+        layout="@layout/ad_native_large"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <View
+        android:id="@+id/ad_hold"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="10dp"
+        android:background="@mipmap/nav_ad_holder"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

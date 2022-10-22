@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.tools.easy.scanner.R
-import com.tools.easy.scanner.ui.MainActivity
+import com.tools.easy.scanner.ui.home.MainActivity
 
 /**
  *  description :
