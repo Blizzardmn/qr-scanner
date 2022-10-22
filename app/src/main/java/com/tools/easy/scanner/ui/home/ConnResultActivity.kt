@@ -39,7 +39,7 @@ class ConnResultActivity: BasicActivity<ActivityConnResultBinding>(), View.OnCli
             binding.tvTip.text = "Disconnected now"
         }
 
-        val serverEntity = intent.getSerializableExtra("entity") as? ServerEntity
+        val serverEntity = intent.getSerializableExtra("server") as? ServerEntity
         binding.tvLocation.text = "${serverEntity?.country} - ${serverEntity?.name}"
 
         loadAd()
@@ -109,9 +109,10 @@ class ConnResultActivity: BasicActivity<ActivityConnResultBinding>(), View.OnCli
     }
 
     companion object {
-        fun open(activity: Activity, isYes: Boolean) {
+        fun open(activity: Activity, isYes: Boolean, server: ServerEntity? = null) {
             val intent = Intent(activity, ConnResultActivity::class.java)
             intent.putExtra("is_yes", isYes)
+            intent.putExtra("server", server)
             activity.startActivity(intent)
         }
     }

@@ -64,6 +64,11 @@
             tools:ignore="LockedOrientationActivity" />
 
         <activity
+            android:name=".ui.home.ConnResultActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
             android:name=".ui.other.HtmlActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />

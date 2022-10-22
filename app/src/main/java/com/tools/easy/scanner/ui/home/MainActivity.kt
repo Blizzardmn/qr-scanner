@@ -66,6 +66,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        connection.connect(this, this)
 
         initList()
         checkV()
@@ -186,6 +187,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
     }
 
     private fun startConnect() {
+        maskView?.visibility = View.GONE
         lifecycleScope.launch {
             if (Core.curState == BaseService.State.Connected) {
                 changeState(BaseService.State.Stopping)
@@ -202,7 +204,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
                     ad.show(this@MainActivity)
                 }
                 Core.stopService()
-                ConnResultActivity.open(this@MainActivity, false)
+                ConnResultActivity.open(this@MainActivity, false, connectedServer)
             } else {
                 changeState(BaseService.State.Connecting)
                 var serverEntity: ServerEntity? = null
@@ -235,8 +237,9 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
                     profile.remotePort = serverEntity!!.port
                     profile.password = serverEntity!!.pwd
                     Core.currentProfile = ProfileManager.expand(profile)
+                    connectedServer = serverEntity
                     Core.startService()
-                    ConnResultActivity.open(this@MainActivity, true)
+                    ConnResultActivity.open(this@MainActivity, true, serverEntity)
                 } else {
                     changeState(BaseService.State.Stopped)
                     toastLong("Connect failed, try again")
@@ -315,10 +318,10 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
                     ad.show(this@MainActivity)
                 }
             }, justCache = true)
-            AdLoader.preloadAd(AdConst.adBack)
         }
         AdLoader.preloadAd(AdConst.adIns)
         AdLoader.preloadAd(AdConst.adResult)
+        if (vEnabled) AdLoader.preloadAd(AdConst.adBack)
         //nativeAd
         //1 minutes
         if ((System.currentTimeMillis() - lastShowTime > 60_000L)
@@ -398,5 +401,6 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
 
     companion object {
         val atomicBackAd = AtomicBoolean(false)
+        var connectedServer: ServerEntity? = null
     }
 }

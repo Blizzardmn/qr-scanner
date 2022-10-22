@@ -13,7 +13,6 @@ import org.jetbrains.anko.dip
 class MaskView: View {
     private lateinit var paint: Paint
     private lateinit var bitmapPaint: Paint
-    private lateinit var bitmap: Bitmap
     private var rect = Rect()
     private var view: View? = null
     private val xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
@@ -57,7 +56,7 @@ class MaskView: View {
             right = view.x + view.width
             top = view.y
             bottom = view.y + view.height
-            guideClickLeft = right * 0.85f - bitmap.width / 3f
+            guideClickLeft = right * 0.85f
             guideClickTop = (view.bottom + context.dip(8f)).toFloat()
             rect = Rect(0, 0, width, height)
 
