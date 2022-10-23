@@ -256,11 +256,11 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
 
     private suspend fun connectTest(): ServerEntity? = suspendCancellableCoroutine { const ->
         runBlocking {
-            DataStorage().startPing() {
+            DataStorage.startCheck {
                 if (isActivityPaused()) {
                     changeState(BaseService.State.Stopped)
                     const.resume(null)
-                    return@startPing
+                    return@startCheck
                 }
 
                 if (it != null) {

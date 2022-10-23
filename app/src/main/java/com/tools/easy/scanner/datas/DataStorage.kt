@@ -16,17 +16,15 @@ import kotlin.coroutines.resume
 /**
  *  description :
  */
-class DataStorage {
+object DataStorage {
 
-    companion object {
-        //0 所有用户均不可见; 1: fb用户可见; 2: 自然量用户可见
-        var curState = 0
-        private val serverList = ArrayList<ServerEntity>()
-        private const val DEFAULT_SERVERS =
-            "eyJjdXJfc3RhdGUiOjEsInVzZXJfZW5hYmxlIjp0cnVlLCJyZWNvbW1lbmQiOiJVUyIsImxpc3QiOlt7ImlwIjoiMTkzLjM3LjU2LjEzOSIsInBvcnQiOjg4MjIsInB3ZCI6InhtbmlAI2NlbmRpc2c2MyIsImNvdW50cnkiOiJVbml0ZWQgS2luZ2RvbSAiLCJjaXR5IjoiTG9uZG9uMDEifV19"
-    }
+    //0 所有用户均不可见; 1: fb用户可见; 2: 自然量用户可见
+    var curState = 0
+    private val serverList = ArrayList<ServerEntity>()
+    private const val DEFAULT_SERVERS =
+        "eyJjdXJfc3RhdGUiOjEsInVzZXJfZW5hYmxlIjp0cnVlLCJyZWNvbW1lbmQiOiJVUyIsImxpc3QiOlt7ImlwIjoiMTkzLjM3LjU2LjEzOSIsInBvcnQiOjg4MjIsInB3ZCI6InhtbmlAI2NlbmRpc2c2MyIsImNvdW50cnkiOiJVbml0ZWQgS2luZ2RvbSAiLCJjaXR5IjoiTG9uZG9uMDEifV19"
 
-    fun startPing( result: (ipEntity: ServerEntity?) -> Unit) = GlobalScope.launch {
+    fun startCheck(result: (ipEntity: ServerEntity?) -> Unit) = GlobalScope.launch {
         val passList = Vector<ServerEntity>()
         val list = getIpList()
         list.forEach {

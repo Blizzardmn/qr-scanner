@@ -14,6 +14,7 @@ import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 import com.tools.easy.scanner.advertise.AdLoader
 import com.tools.easy.scanner.datas.RemoteConfig
+import com.tools.easy.scanner.support.ReferSupport
 import com.tools.easy.scanner.ui.home.MainActivity
 import com.tools.easy.scanner.ui.OpenActivity
 import kotlinx.coroutines.GlobalScope
@@ -22,6 +23,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
+
+val isDebug = BuildConfig.DEBUG
 /**
  *  description :
  */
@@ -30,7 +33,6 @@ class App: Application() {
     companion object {
         lateinit var ins: App
         var isFilter = false
-        const val isDebug = true
     }
 
     override fun onCreate() {
@@ -45,6 +47,7 @@ class App: Application() {
 
         if (getProcessName(this) != packageName) return
 
+        ReferSupport.referCheck(this)
         MobileAds.initialize(this)
         RemoteConfig.ins.fetchAndActivate {
             AdLoader.parseRemoteConfig()
