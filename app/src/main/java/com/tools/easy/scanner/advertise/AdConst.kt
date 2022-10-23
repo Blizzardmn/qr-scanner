@@ -10,9 +10,9 @@ object AdConst {
 
     val adOpen = AdPos("open")
     val adIns = AdPos("ins_process")
+    val adBack = AdPos("ins_back")
     val adMain = AdPos("nav_main")
     val adResult = AdPos("nav_result")
-    val adBack = AdPos("ins_back")
 
 
 }
