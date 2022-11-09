@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/gradient_26b0ff_4c7fff"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="158dp"
         android:src="@mipmap/launcher_foreground"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="200dp"
-        android:layout_width="92dp"
-        android:layout_height="92dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:src="@mipmap/qr_scanner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="308dp"
+    <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="380dp"
+        android:text="@string/app_name"
+        android:textColor="#12CE98"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progress_bar"

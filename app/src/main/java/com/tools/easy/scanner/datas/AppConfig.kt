@@ -54,4 +54,12 @@ class AppConfig {
         set(value) {
             sp.edit().putString("install_refer", value).apply()
         }
+
+    var connectedTimeMs: Long
+        get() {
+            return sp.getLong("connected_tms", 0L)
+        }
+        set(value) {
+            sp.edit().putLong("connected_tms", value).apply()
+        }
 }

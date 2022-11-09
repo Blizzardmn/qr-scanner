@@ -15,8 +15,8 @@ import com.google.firebase.FirebaseApp
 import com.tools.easy.scanner.advertise.AdLoader
 import com.tools.easy.scanner.datas.RemoteConfig
 import com.tools.easy.scanner.support.ReferSupport
-import com.tools.easy.scanner.ui.home.MainActivity
 import com.tools.easy.scanner.ui.OpenActivity
+import com.tools.easy.scanner.ui.new.HomeActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -43,7 +43,7 @@ class App: Application() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        Core.init(this, MainActivity::class)
+        Core.init(this, HomeActivity::class)
 
         if (getProcessName(this) != packageName) return
 

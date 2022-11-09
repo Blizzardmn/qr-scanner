@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QR Scanner</string>
+    <string name="app_name">Lightning VPN</string>
     <string name="cat_clipboard" translatable="false">Clipboard</string>
     <string name="cat_email" translatable="false">Email</string>
     <string name="cat_website" translatable="false">Website</string>

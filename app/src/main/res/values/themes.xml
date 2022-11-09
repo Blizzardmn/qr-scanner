@@ -5,7 +5,7 @@
     <style name="Theme.QRScanner" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">#26B0FF</item>
+        <item name="colorPrimaryVariant">#12CE98</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

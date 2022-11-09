@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/bg_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="258dp"
+        android:background="@drawable/gradient_33dfe1e8_rt140" />
+
+    <ImageView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginTop="15dp"
+        android:src="@mipmap/lightvpn_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_settings"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_scan"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="12dp"
+        android:src="@mipmap/ic_home_scan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/bg_serv"
+        android:layout_width="200dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/stroke_12ce98_r12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <TextView
+        android:id="@+id/tv_serv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:drawableEnd="@mipmap/arrow_right"
+        android:drawablePadding="8dp"
+        android:text="Fast Server"
+        android:textColor="#111A34"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/bg_serv"
+        app:layout_constraintEnd_toEndOf="@id/bg_serv"
+        app:layout_constraintStart_toStartOf="@id/bg_serv"
+        app:layout_constraintTop_toTopOf="@id/bg_serv"
+        tools:ignore="HardcodedText,SmallSp" />
+
+    <ImageView
+        android:id="@+id/img_serv"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/serv_fast"
+        app:layout_constraintBottom_toBottomOf="@id/bg_serv"
+        app:layout_constraintEnd_toStartOf="@id/tv_serv"
+        app:layout_constraintTop_toTopOf="@id/bg_serv" />
+
+    <ImageView
+        android:id="@+id/img_conn"
+        android:layout_width="202dp"
+        android:layout_height="202dp"
+        android:layout_marginTop="24dp"
+        android:src="@mipmap/bg_conn_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bg_serv" />
+
+    <ImageView
+        android:id="@+id/conn_rotate"
+        android:layout_width="121dp"
+        android:layout_height="121dp"
+        android:src="@mipmap/conn_rotate"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/img_conn"
+        app:layout_constraintEnd_toEndOf="@id/img_conn"
+        app:layout_constraintStart_toStartOf="@id/img_conn"
+        app:layout_constraintTop_toTopOf="@id/img_conn" />
+
+    <View
+        android:id="@+id/bg_conn"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:layout_marginHorizontal="35dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/stroke_dfe1e8_r12"
+        app:layout_constraintTop_toBottomOf="@id/img_conn" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="__:__:__"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/bg_conn"
+        app:layout_constraintStart_toStartOf="@id/bg_conn"
+        app:layout_constraintTop_toTopOf="@id/bg_conn" />
+
+    <TextView
+        android:id="@+id/tv_conn"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/bg_19daa3_r8"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Connect"
+        android:textColor="#111A34"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/bg_conn"
+        app:layout_constraintEnd_toEndOf="@id/bg_conn"
+        app:layout_constraintTop_toTopOf="@id/bg_conn" />
+
+    <include
+        android:id="@+id/ad_main"
+        layout="@layout/ad_native_large"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <View
+        android:id="@+id/ad_hold"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="10dp"
+        android:background="@mipmap/nav_ad_holder"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
