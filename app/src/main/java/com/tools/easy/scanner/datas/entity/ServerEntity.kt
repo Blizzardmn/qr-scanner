@@ -10,7 +10,7 @@ data class ServerEntity(
     var isFaster: Boolean = true,
     val code: String = "",
     val country: String = "",
-    val name: String = "",
+    val name: String = "Fast Server",
     val host: String = "",
     val port: Int = 443,
     val pwd: String = ""

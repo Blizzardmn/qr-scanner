@@ -100,7 +100,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
     @SuppressLint("SetTextI18n")
     private fun reviewCurrentServer() {
         if (mConnServerEntity.isFaster) {
-            binding.main.tvServ.text = "Fast Server"
+            binding.main.tvServ.text = mConnServerEntity.name
             binding.main.imgServ.setImageResource(R.drawable.serv_fast)
             return
         }
@@ -199,6 +199,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
         binding.main.apply {
 
             if (state == BaseService.State.Connected) {
+                imgConn.setImageResource(R.mipmap.bg_conn_btn_done)
                 parent.setBackgroundColor(Color.parseColor("#EFFFFB"))
                 bgBottom.setBackgroundResource(R.drawable.gradient_dbfef4_rt140)
                 bgServ.setBackgroundResource(R.drawable.bg_19daa3_r8)
@@ -209,6 +210,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
                 AppConfig.ins.connectedTimeMs = System.currentTimeMillis()
                 checkStartTimer()
             } else {
+                imgConn.setImageResource(R.mipmap.bg_conn_btn)
                 parent.setBackgroundColor(Color.parseColor("#FFFFFF"))
                 bgBottom.setBackgroundResource(R.drawable.gradient_33dfe1e8_rt140)
                 bgServ.setBackgroundResource(R.drawable.stroke_12ce98_r12)
