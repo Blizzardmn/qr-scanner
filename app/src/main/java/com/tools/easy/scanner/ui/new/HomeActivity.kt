@@ -10,6 +10,7 @@ import android.os.RemoteException
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.aidl.IShadowsocksService
@@ -31,10 +32,10 @@ import com.tools.easy.scanner.support.GpSupport
 import com.tools.easy.scanner.support.ReferSupport
 import com.tools.easy.scanner.ui.ScanActivity
 import com.tools.easy.scanner.ui.home.ConnResultActivity
-import com.tools.easy.scanner.ui.home.MainActivity
 import com.tools.easy.scanner.ui.other.HtmlActivity
 import com.tools.easy.scanner.ui.widget.MaskView
 import kotlinx.coroutines.*
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
 
 /**
@@ -57,6 +58,29 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
         vEnabled = ReferSupport.isCurrentStateEnabled()
     }
 
+    companion object {
+        val atomicBackAd = AtomicBoolean(false)
+        var connectedServer: ServerEntity = ServerEntity(true)
+    }
+
+    private var mConnServerEntity = connectedServer
+
+    private val openServersLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
+        if (activityResult == null) return@registerForActivityResult
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            if (Core.isConnecting()) {
+                toastLong("Please wait operation done.")
+                return@registerForActivityResult
+            }
+            /*val serverEntity = activityResult.data?.getSerializableExtra(ServKey) as? ConnBean
+                ?: return@registerForActivityResult*/
+            mConnServerEntity = connectedServer
+            reviewCurrentServer()
+            AppConfig.ins.cachedServer = mConnServerEntity
+            doConnect()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         connection.connect(this, this)
@@ -64,11 +88,25 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
         mRotateReverse = AnimationUtils.loadAnimation(this, R.anim.rotate_reverse)
 
         checkV()
+        mConnServerEntity = AppConfig.ins.cachedServer
+        reviewCurrentServer()
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         checkV()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun reviewCurrentServer() {
+        if (mConnServerEntity.isFaster) {
+            binding.main.tvServ.text = "Fast Server"
+            binding.main.imgServ.setImageResource(R.drawable.serv_fast)
+            return
+        }
+
+        binding.main.tvServ.text = mConnServerEntity.name
+        binding.main.imgServ.setImageResource(App.servFlagByCode(mConnServerEntity.code))
     }
 
     override fun onClick(v: View?) {
@@ -77,7 +115,12 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
                 startActivity(Intent(this, ScanActivity::class.java))
             }
 
-            R.id.img_v -> doConnect()
+            R.id.bg_serv -> {
+                val intent = Intent(this, ServersActivity::class.java)
+                openServersLauncher.launch(intent)
+            }
+
+            R.id.img_conn, R.id.tv_conn -> doConnect()
 
             R.id.img_settings -> {
                 binding.drawerLayout.openDrawer(binding.navView)
@@ -260,7 +303,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
                     ad.show(this@HomeActivity)
                 }
                 Core.stopService()
-                ConnResultActivity.open(this@HomeActivity, false, MainActivity.connectedServer)
+                ConnResultActivity.open(this@HomeActivity, false, connectedServer)
             } else {
                 changeState(BaseService.State.Connecting)
                 var serverEntity: ServerEntity? = null
@@ -293,7 +336,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
                     profile.remotePort = serverEntity!!.port
                     profile.password = serverEntity!!.pwd
                     Core.currentProfile = ProfileManager.expand(profile)
-                    MainActivity.connectedServer = serverEntity
+                    connectedServer = serverEntity!!
                     Core.startService()
                     ConnResultActivity.open(this@HomeActivity, true, serverEntity)
                 } else {
@@ -365,7 +408,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
     //首頁原生
     private var nativeAd: BaseNative? = null
     private fun loadAd() {
-        if (vEnabled && MainActivity.atomicBackAd.getAndSet(false)) {
+        if (vEnabled && atomicBackAd.getAndSet(false)) {
             AdLoader.loadAd(App.ins, AdConst.adBack, object : AdsListener() {
                 override fun onAdLoaded(ad: BaseAd) {
                     if (ad !is BaseInterstitial) {

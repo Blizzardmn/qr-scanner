@@ -10,6 +10,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.collections.ArrayList
 import kotlin.coroutines.resume
 
@@ -23,6 +24,78 @@ object DataStorage {
     private val serverList = ArrayList<ServerEntity>()
     private const val DEFAULT_SERVERS =
         "eyJjdXJfc3RhdGUiOjEsInVzZXJfZW5hYmxlIjp0cnVlLCJyZWNvbW1lbmQiOiJVUyIsImxpc3QiOlt7ImlwIjoiMTkzLjM3LjU2LjEzOSIsInBvcnQiOjg4MjIsInB3ZCI6InhtbmlAI2NlbmRpc2c2MyIsImNvdW50cnkiOiJVbml0ZWQgS2luZ2RvbSAiLCJjaXR5IjoiTG9uZG9uMDEifV19"
+
+    private var dataList: ArrayList<ServerEntity>? = null
+
+    /**
+     * @param timeoutMs 实时获取的超时时间,超过这个时间点就直接返回local data
+     * */
+    fun getServers(action: (ArrayList<ServerEntity>?) -> Unit, timeoutMs: Long = 65_000L) = GlobalScope.launch(Dispatchers.Main) {
+        //如果是已经获取到了及时的数据,那么就返回这个数据
+        //testEncodeServers()
+        if (!dataList.isNullOrEmpty()) {
+            launch(Dispatchers.Main) {
+                action.invoke(dataList)
+            }
+            return@launch
+        }
+
+        //超时之后return local data
+        val atomicReturned = AtomicBoolean(false)
+        fun onFailed2UsingLocalData() {
+            if (!atomicReturned.getAndSet(true)) {
+                val data = if (dataList.isNullOrEmpty()) {
+                    obtainLocal()
+                } else {
+                    dataList
+                }
+                launch(Dispatchers.Main) {
+                    action.invoke(data)
+                }
+            }
+        }
+        /*if (true) {
+            onFailed2UsingLocalData()
+            return
+        }*/
+
+        launch {
+            delay(timeoutMs)
+            onFailed2UsingLocalData()
+        }
+
+        getServers { testList ->
+            if (testList.isNullOrEmpty()) {
+                onFailed2UsingLocalData()
+            } else {
+                Collections.sort(testList, object :Comparator<ServerEntity> {
+                    override fun compare(
+                        o1: ServerEntity?,
+                        o2: ServerEntity?
+                    ): Int {
+                        if (o1 == null || o2 == null) return 0
+                        return o1.name.compareTo(o2.name)
+                    }
+                })
+                //超时之后保存值,但是并不使用
+                dataList = testList
+                if (!atomicReturned.getAndSet(true)) {
+                    launch(Dispatchers.Main) {
+                        action.invoke(testList)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun obtainLocal(): ArrayList<ServerEntity> {
+        //logger("读取本地：$data")
+        return try {
+            parseList(JSONObject(String(Base64.decode(DEFAULT_SERVERS, Base64.NO_WRAP))))
+        } catch (e: Exception) {
+            ArrayList()
+        }
+    }
 
     fun startCheck(result: (ipEntity: ServerEntity?) -> Unit) = GlobalScope.launch {
         val passList = Vector<ServerEntity>()
@@ -108,26 +181,59 @@ object DataStorage {
 
                 if (config.isEmpty()) config = DEFAULT_SERVERS
                 val jb = JSONObject(String(Base64.decode(config, Base64.NO_WRAP)))
+                val list = parseList(jb)
+                result(list)
 
-                curState = jb.optInt("cur_state", 0)
+                /*curState = jb.optInt("cur_state", 0)
                 val serverArr = jb.getJSONArray("list")
-                val list = ArrayList<ServerEntity>()
                 for (i in 0 until serverArr.length()) {
                     val ipJb = serverArr.optJSONObject(i)
                     val ip = ipJb.optString("ip")
                     val port = ipJb.optInt("port")
                     val pwd = ipJb.optString("pwd")
+                    val code = ipJb.optString("code")
                     val country = ipJb.optString("country")
                     val name = ipJb.optString("city")
-                    val ipEntity = ServerEntity(country, name, ip, port, pwd)
+                    val ipEntity = ServerEntity(
+                        isFaster = false,
+                        code = code,
+                        country = country,
+                        name = name,
+                        host = ip,
+                        port = port,
+                        pwd = pwd)
                     list.add(ipEntity)
-                }
-
-                result(list)
+                }*/
             }
         } catch (e: Exception) {
             e.printStackTrace()
             FirebaseCrashlytics.getInstance().recordException(e)
         }
+    }
+
+    private fun parseList(json: JSONObject): ArrayList<ServerEntity> {
+        curState = json.optInt("cur_state", 0)
+        val serverArr = json.getJSONArray("list")
+        val list = ArrayList<ServerEntity>()
+        for (i in 0 until serverArr.length()) {
+            val ipJb = serverArr.optJSONObject(i)
+            val ip = ipJb.optString("ip")
+            val port = ipJb.optInt("port")
+            val pwd = ipJb.optString("pwd")
+            val code = ipJb.optString("code")
+            val country = ipJb.optString("country")
+            val name = ipJb.optString("city")
+            val ipEntity = ServerEntity(
+                isFaster = false,
+                code = code,
+                country = country,
+                name = name,
+                host = ip,
+                port = port,
+                pwd = pwd)
+            list.add(ipEntity)
+        }
+
+        return list
     }
 }

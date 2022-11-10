@@ -29,6 +29,7 @@
         android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:onClick="onClick"
         android:src="@drawable/ic_settings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,6 +39,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="12dp"
+        android:onClick="onClick"
         android:src="@mipmap/ic_home_scan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,6 +50,7 @@
         android:layout_height="52dp"
         android:layout_marginTop="48dp"
         android:background="@drawable/stroke_12ce98_r12"
+        android:onClick="onClick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
@@ -84,6 +87,7 @@
         android:layout_width="202dp"
         android:layout_height="202dp"
         android:layout_marginTop="24dp"
+        android:onClick="onClick"
         android:src="@mipmap/bg_conn_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,6 +132,7 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/bg_19daa3_r8"
         android:gravity="center"
+        android:onClick="onClick"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:text="Connect"

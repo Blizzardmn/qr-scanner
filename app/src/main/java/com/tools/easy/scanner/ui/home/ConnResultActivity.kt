@@ -17,6 +17,7 @@ import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityConnResultBinding
 import com.tools.easy.scanner.datas.entity.ServerEntity
 import com.tools.easy.scanner.ui.ScanActivity
+import com.tools.easy.scanner.ui.new.HomeActivity
 
 /**
  *  description :
@@ -57,7 +58,7 @@ class ConnResultActivity: BasicActivity<ActivityConnResultBinding>(), View.OnCli
     }
 
     override fun onBackPressed() {
-        MainActivity.atomicBackAd.set(true)
+        HomeActivity.atomicBackAd.set(true)
         super.onBackPressed()
     }
 

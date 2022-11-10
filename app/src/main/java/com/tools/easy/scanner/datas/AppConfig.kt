@@ -1,7 +1,11 @@
 package com.tools.easy.scanner.datas
 
 import android.content.Context
+import android.text.TextUtils
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.tools.easy.scanner.App
+import com.tools.easy.scanner.datas.entity.ServerEntity
 
 /**
  *  description :
@@ -14,6 +18,18 @@ class AppConfig {
 
     private val sp = App.ins.getSharedPreferences("qr_own_self", Context.MODE_PRIVATE)
 
+    var cachedServer: ServerEntity
+        get() {
+            val decodeString = sp.getString("connected_server_entity", "")
+            return if (decodeString.isNullOrEmpty()) {
+                ServerEntity()
+            } else {
+                ServerEntity.instance(decodeString)
+            }
+        }
+        set(value) {
+            sp.edit().putString("connected_server_entity", value.toString()).apply()
+        }
 
     var isScanBeepOn: Boolean
         get() {

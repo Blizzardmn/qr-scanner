@@ -33,6 +33,22 @@ class App: Application() {
     companion object {
         lateinit var ins: App
         var isFilter = false
+
+        fun servFlagByCode(code: String): Int {
+            return when (code.uppercase()) {
+                "AU" -> R.drawable.serv_au
+                "US" -> R.drawable.serv_us
+                "CA" -> R.drawable.serv_ca
+                "FR" -> R.drawable.serv_none
+                "DE" -> R.drawable.serv_de
+                "HK" -> R.drawable.serv_hk
+                "JP" -> R.drawable.serv_jp
+                "SG" -> R.drawable.serv_sg
+                "GB" -> R.drawable.serv_gb
+                "UK" -> R.drawable.serv_gb
+                else -> R.drawable.serv_fast
+            }
+        }
     }
 
     override fun onCreate() {

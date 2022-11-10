@@ -204,7 +204,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
                     ad.show(this@MainActivity)
                 }
                 Core.stopService()
-                ConnResultActivity.open(this@MainActivity, false, connectedServer)
+                //ConnResultActivity.open(this@MainActivity, false, connectedServer)
             } else {
                 changeState(BaseService.State.Connecting)
                 var serverEntity: ServerEntity? = null
@@ -237,7 +237,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
                     profile.remotePort = serverEntity!!.port
                     profile.password = serverEntity!!.pwd
                     Core.currentProfile = ProfileManager.expand(profile)
-                    connectedServer = serverEntity
+                    //connectedServer = serverEntity
                     Core.startService()
                     ConnResultActivity.open(this@MainActivity, true, serverEntity)
                 } else {
@@ -309,7 +309,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
     //首頁原生
     private var nativeAd: BaseNative? = null
     private fun loadAd() {
-        if (vEnabled && atomicBackAd.getAndSet(false)) {
+        /*if (vEnabled && atomicBackAd.getAndSet(false)) {
             AdLoader.loadAd(App.ins, AdConst.adBack, object : AdsListener() {
                 override fun onAdLoaded(ad: BaseAd) {
                     if (ad !is BaseInterstitial) {
@@ -318,7 +318,7 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
                     ad.show(this@MainActivity)
                 }
             }, justCache = true)
-        }
+        }*/
         AdLoader.preloadAd(AdConst.adIns)
         AdLoader.preloadAd(AdConst.adResult)
         if (vEnabled) AdLoader.preloadAd(AdConst.adBack)
@@ -397,10 +397,5 @@ class MainActivity : BasicActivity<ActivityMainBinding>(), View.OnClickListener,
         adapter.setOnClick {
             CreateActivity.openCreatePage(this@MainActivity, it.name)
         }
-    }
-
-    companion object {
-        val atomicBackAd = AtomicBoolean(false)
-        var connectedServer: ServerEntity? = null
     }
 }

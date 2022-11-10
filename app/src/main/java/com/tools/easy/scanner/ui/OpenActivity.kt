@@ -14,7 +14,7 @@ import com.tools.easy.scanner.advertise.base.BaseAd
 import com.tools.easy.scanner.advertise.base.BaseInterstitial
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityOpenBinding
-import com.tools.easy.scanner.ui.home.MainActivity
+import com.tools.easy.scanner.ui.new.HomeActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
@@ -95,7 +95,7 @@ class OpenActivity: BasicActivity<ActivityOpenBinding>() {
     private fun openMain() {
         if (atomicStarted.getAndSet(true)) return
         if (!intent.getBooleanExtra("restart", false)) {
-            startActivity(Intent(this@OpenActivity, MainActivity::class.java))
+            startActivity(Intent(this@OpenActivity, HomeActivity::class.java))
         }
         finish()
     }
