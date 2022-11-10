@@ -27,7 +27,7 @@ import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityResultBinding
 import com.tools.easy.scanner.support.GpSupport
 import com.tools.easy.scanner.support.Supports
-import com.tools.easy.scanner.ui.home.MainActivity
+import com.tools.easy.scanner.ui.new.HomeActivity
 import java.util.*
 
 /**
@@ -60,7 +60,7 @@ class ResultScanActivity: BasicActivity<ActivityResultBinding>() {
     }
 
     override fun onBackPressed() {
-        MainActivity.atomicBackAd.set(true)
+        HomeActivity.atomicBackAd.set(true)
         super.onBackPressed()
     }
 

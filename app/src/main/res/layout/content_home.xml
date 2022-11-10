@@ -64,18 +64,18 @@
         android:drawablePadding="8dp"
         android:text="Fast Server"
         android:textColor="#111A34"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/bg_serv"
         app:layout_constraintEnd_toEndOf="@id/bg_serv"
         app:layout_constraintStart_toStartOf="@id/bg_serv"
         app:layout_constraintTop_toTopOf="@id/bg_serv"
-        tools:ignore="HardcodedText,SmallSp" />
+        tools:ignore="HardcodedText" />
 
     <ImageView
         android:id="@+id/img_serv"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/serv_fast"
         app:layout_constraintBottom_toBottomOf="@id/bg_serv"
@@ -138,6 +138,7 @@
         android:text="Connect"
         android:textColor="#111A34"
         android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/bg_conn"
         app:layout_constraintEnd_toEndOf="@id/bg_conn"
         app:layout_constraintTop_toTopOf="@id/bg_conn" />

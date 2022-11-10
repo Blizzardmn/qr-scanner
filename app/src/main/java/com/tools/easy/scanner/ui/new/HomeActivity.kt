@@ -249,6 +249,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
     private var jobTimer: Job? = null
     private var startTms = 0L
     private fun checkStartTimer() {
+        if (!Core.isConnected()) return
         jobTimer?.cancel()
         jobTimer = lifecycleScope.launch {
             startTms = AppConfig.ins.connectedTimeMs
@@ -258,7 +259,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
             var s: Long
             var l: Long
             while (!isActivityPaused()) {
-                l = System.currentTimeMillis() - startTms
+                l = (System.currentTimeMillis() - startTms) / 1000L
                 h = l / 3600
                 l %= 3600
                 m = l / 60

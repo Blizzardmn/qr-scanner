@@ -33,7 +33,7 @@
         android:layout_marginHorizontal="60dp"
         android:layout_marginBottom="66dp"
         android:max="100"
-        android:progress="30"
+        android:progress="3"
         android:progressDrawable="@drawable/layer_progress"
         app:layout_constraintBottom_toBottomOf="parent" />
 

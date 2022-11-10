@@ -23,7 +23,7 @@ import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityCreateResultBinding
 import com.tools.easy.scanner.support.CodeBuilder
 import com.tools.easy.scanner.support.CreateEntity
-import com.tools.easy.scanner.ui.home.MainActivity
+import com.tools.easy.scanner.ui.new.HomeActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AfterPermissionGranted
@@ -74,7 +74,7 @@ class ResultCreateActivity: BasicActivity<ActivityCreateResultBinding>(), EasyPe
     }
 
     override fun onBackPressed() {
-        MainActivity.atomicBackAd.set(true)
+        HomeActivity.atomicBackAd.set(true)
         super.onBackPressed()
     }
 
