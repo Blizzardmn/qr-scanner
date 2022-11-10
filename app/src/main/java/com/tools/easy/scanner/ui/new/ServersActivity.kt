@@ -4,6 +4,14 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tools.easy.scanner.App
+import com.tools.easy.scanner.R
+import com.tools.easy.scanner.advertise.AdConst
+import com.tools.easy.scanner.advertise.AdLoader
+import com.tools.easy.scanner.advertise.base.AdmobNative
+import com.tools.easy.scanner.advertise.base.AdsListener
+import com.tools.easy.scanner.advertise.base.BaseAd
+import com.tools.easy.scanner.advertise.base.BaseNative
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityServersBinding
 import com.tools.easy.scanner.datas.DataStorage
@@ -57,6 +65,8 @@ class ServersActivity: BasicActivity<ActivityServersBinding>() {
             list.add(0, ServerEntity(isFaster = true))
             onConfigLoaded(list)
         }, 5500L)
+
+        loadAd()
     }
 
     private fun onConfigLoaded(list: ArrayList<ServerEntity>) {
@@ -76,5 +86,53 @@ class ServersActivity: BasicActivity<ActivityServersBinding>() {
     override fun onBackPressed() {
         HomeActivity.atomicBackAd.set(true)
         super.onBackPressed()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        nativeAd?.onDestroy()
+    }
+
+    private var nativeAd: BaseNative? = null
+    private fun loadAd() {
+        AdLoader.loadAd(App.ins, AdConst.adMain, object : AdsListener(){
+            override fun onAdLoaded(ad: BaseAd) {
+                when (ad) {
+                    is BaseNative -> {
+                        nativeAd?.onDestroy()
+                        nativeAd = ad
+                        onNativeLoaded(ad)
+                    }
+
+                    else -> return
+                }
+            }
+
+            override fun onAdError(err: String?) {
+                onNativeLoaded(null)
+            }
+        })
+    }
+
+    private fun onNativeLoaded(ad: BaseNative?) {
+        if (ad !is AdmobNative) {
+            binding.adHold.visibility = View.VISIBLE
+            val adContainer = binding.adMain.root
+            adContainer.visibility = View.GONE
+            return
+        }
+
+        binding.adHold.visibility = View.GONE
+        binding.adMain.root.apply {
+            visibility = View.VISIBLE
+
+            ad.showIcon(this, findViewById(R.id.ad_icon))
+            ad.showImage(this, findViewById(R.id.ad_img))
+            ad.showTitle(this, findViewById(R.id.ad_title))
+            ad.showBody(this, findViewById(R.id.ad_desc))
+            ad.showCta(this, findViewById(R.id.ad_action))
+            ad.register(this)
+        }
+        AdLoader.preloadAd(AdConst.adMain)
     }
 }
