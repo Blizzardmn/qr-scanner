@@ -360,6 +360,11 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
         if (isAccountPrepared) {
             AppEventLogger.ins.logEvent("connect_success")
             dispatch2Result(true)
+
+            AdLoader.preloadAd(AdConst.adIns, true)
+            AdLoader.preloadAd(AdConst.adMain, true)
+            AdLoader.preloadAd(AdConst.adOpen, true)
+            if (vEnabled) AdLoader.preloadAd(AdConst.adBack, true)
         } else {
             onConnectFailed()
             updateConnUI(BaseService.State.Stopped)

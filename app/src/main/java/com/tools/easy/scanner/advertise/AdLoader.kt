@@ -39,11 +39,15 @@ object AdLoader: AdmobLoader(), CoroutineScope by MainScope() {
     }
 
     @Synchronized
-    fun add2cache(adPos: AdPos, ad: BaseAd) {
+    fun add2cache(adPos: AdPos, ad: BaseAd, force2first: Boolean = false) {
         var arrayList = cacheAds[adPos.name]
         if (arrayList == null) {
             arrayList = arrayListOf()
             cacheAds[adPos.name] = arrayList
+        }
+        if (force2first) {
+            arrayList.add(0, ad)
+            return
         }
         arrayList.add(ad)
         Collections.sort(arrayList, comparator)
@@ -55,13 +59,13 @@ object AdLoader: AdmobLoader(), CoroutineScope by MainScope() {
         return !arrayList.isNullOrEmpty()
     }
 
-    fun preloadAd(adPos: AdPos) {
-        if (hasCached(adPos)) return
+    fun preloadAd(adPos: AdPos, preload2firstCache: Boolean = false) {
+        if (!preload2firstCache && hasCached(adPos)) return
         loadAd(App.ins, adPos, object : AdsListener() {
             override fun onAdLoaded(ad: BaseAd) {
                 add2cache(adPos, ad)
             }
-        }, forceLoad = false)
+        }, forceLoad = preload2firstCache)
     }
 
     fun loadAd(ctx: Context, adPos: AdPos, adsListener: AdsListener, justCache: Boolean = false, forceLoad: Boolean = true) {
