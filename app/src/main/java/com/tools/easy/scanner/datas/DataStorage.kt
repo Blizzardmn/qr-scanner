@@ -111,7 +111,7 @@ object DataStorage {
             if (passList.isNotEmpty()) {
                 result(passList[Random().nextInt(passList.size)])
             } else {
-                result(null)
+                result(list[Random().nextInt(list.size)])
             }
         }
     }

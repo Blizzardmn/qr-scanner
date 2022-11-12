@@ -8,6 +8,7 @@ import android.net.VpnService
 import android.os.Bundle
 import android.os.RemoteException
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,6 +27,7 @@ import com.tools.easy.scanner.advertise.base.*
 import com.tools.easy.scanner.basic.BasicActivity
 import com.tools.easy.scanner.databinding.ActivityHomeBinding
 import com.tools.easy.scanner.datas.AppConfig
+import com.tools.easy.scanner.datas.AppEventLogger
 import com.tools.easy.scanner.datas.DataStorage
 import com.tools.easy.scanner.datas.entity.ServerEntity
 import com.tools.easy.scanner.support.GpSupport
@@ -56,6 +58,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
     private var vEnabled = false
     private fun checkV() {
         vEnabled = ReferSupport.isCurrentStateEnabled()
+        AppEventLogger.ins.logEvent(if(vEnabled) "open_main_refer_user" else "open_main_referno_user")
     }
 
     companion object {
@@ -90,6 +93,19 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
         checkV()
         mConnServerEntity = AppConfig.ins.cachedServer
         reviewCurrentServer()
+
+        if (AppConfig.ins.isFirstInApp) {
+            AppConfig.ins.isFirstInApp = false
+            if (maskView == null) {
+                maskView = MaskView(this)
+                val root = (window.decorView) as ViewGroup
+                maskView!!.setBackgroundColor(Color.parseColor("#AD000000"))
+                root.addView(maskView, ViewGroup.LayoutParams(-1, -1))
+                maskView!!.setView(binding.main.imgConn) {
+                    doConnect()
+                }
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -295,6 +311,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
     
     private fun onConnectFailed() {
         toastLong("Connect Failed, Try again")
+        AppEventLogger.ins.logEvent("connect_failed")
     }
 
     private fun currentTms(): Long {
@@ -341,7 +358,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
     private fun handleConnect() {
         //准备好账户直接连接
         if (isAccountPrepared) {
-            //FirebaseEvents.impl.sendEvent("connect_success")
+            AppEventLogger.ins.logEvent("connect_success")
             dispatch2Result(true)
         } else {
             onConnectFailed()
@@ -407,6 +424,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
 
             isConnect = true
             updateConnUI(BaseService.State.Connecting)
+            AppEventLogger.ins.logEvent("connect_start")
             launch {
                 loadConnectAd()
                 isAccountPrepared = false
@@ -489,6 +507,10 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
     }
 
     private suspend fun startChoiceConnecting(serverEntity: ServerEntity): Boolean = suspendCancellableCoroutine {
+        if (!serverEntity.isValid()) {
+            it.resume(false)
+            return@suspendCancellableCoroutine
+        }
         defineServer(serverEntity)
         if (it.isActive)
             it.resume(true)
@@ -528,12 +550,11 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
                 }
             }, justCache = true)
         }
-        AdLoader.preloadAd(AdConst.adIns)
-        AdLoader.preloadAd(AdConst.adResult)
         if (vEnabled) AdLoader.preloadAd(AdConst.adBack)
+        AdLoader.preloadAd(AdConst.adIns)
         //nativeAd
         //1 minutes
-        if ((System.currentTimeMillis() - lastShowTime > 60_000L)
+        if ((System.currentTimeMillis() - lastShowTime > 50_000L)
             || isNativeClicked) {
             isNativeClicked = false
             AdLoader.loadAd(App.ins, AdConst.adMain, object : AdsListener(){

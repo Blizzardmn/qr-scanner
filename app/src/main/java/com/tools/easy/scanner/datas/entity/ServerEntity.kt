@@ -16,6 +16,10 @@ data class ServerEntity(
     val pwd: String = ""
 ): Serializable {
 
+    fun isValid(): Boolean {
+        return host.isNotEmpty() && pwd.isNotEmpty()
+    }
+
     override fun toString(): String {
         val json = JSONObject()
         json.put("is_f", isFaster)

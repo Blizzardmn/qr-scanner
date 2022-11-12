@@ -59,7 +59,7 @@ class MaskView: View {
             top = view.y
             bottom = view.y + view.height
             guideClickLeft = (left + right) / 2.5f
-            guideClickTop = (view.bottom - dip(40f)).toFloat()
+            guideClickTop = (view.bottom - dip(50f)).toFloat()
             rect = Rect(0, 0, width, height)
 
             invalidate()
@@ -76,7 +76,7 @@ class MaskView: View {
         super.onDraw(canvas)
         paint.xfermode = xfermode
         paint.color = Color.TRANSPARENT
-        canvas?.drawCircle((left+right)/2, (top+bottom)/2, dp2px(context, 80).toFloat(), paint)
+        canvas?.drawCircle((left+right)/2, (top+bottom)/2, dp2px(context, 100).toFloat(), paint)
         //canvas?.drawRect(left, top, right, bottom, paint)
         paint.xfermode = null
 
