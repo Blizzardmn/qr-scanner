@@ -51,7 +51,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
 
     private val reqPermissionCode = 10000
     private var maskView: MaskView? = null
-    private val connection = ShadowsocksConnection(true)
+    private val vConnection = ShadowsocksConnection(true)
 
     private var vEnabled = false
     private fun checkV() {
@@ -83,7 +83,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        connection.connect(this, this)
+        vConnection.connect(this, this)
         mRotate = AnimationUtils.loadAnimation(this, R.anim.rotate)
         mRotateReverse = AnimationUtils.loadAnimation(this, R.anim.rotate_reverse)
 
@@ -154,7 +154,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
 
     override fun onDestroy() {
         nativeAd?.onDestroy()
-        connection.disconnect(this)
+        vConnection.disconnect(this)
         super.onDestroy()
     }
 
@@ -179,8 +179,8 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
     }
 
     override fun onBinderDied() {
-        connection.disconnect(this)
-        connection.connect(this, this)
+        vConnection.disconnect(this)
+        vConnection.connect(this, this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -188,7 +188,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
         when (requestCode) {
             reqPermissionCode -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    startConnect()
+                    startConnect(mConnServerEntity)
                 }
             }
         }
@@ -276,7 +276,7 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
     private fun doConnect() {
         if (Core.isConnecting()) return
         if (!checkVpnPermission()) return
-        startConnect()
+        startConnect(mConnServerEntity)
     }
 
     private fun checkVpnPermission(): Boolean {
@@ -287,112 +287,219 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
         }
         return true
     }
+    
+    private fun dispatch2Result(isConn: Boolean) {
+        if (!App.ins.isAppForeground()) return
+        ConnResultActivity.open(this, isConn, mConnServerEntity)
+    }
+    
+    private fun onConnectFailed() {
+        toastLong("Connect Failed, Try again")
+    }
 
-    private fun startConnect() {
-        maskView?.visibility = View.GONE
-        lifecycleScope.launch {
-            if (Core.curState == BaseService.State.Connected) {
-                changeState(BaseService.State.Stopping)
-                val ad = withTimeoutOrNull(10000) {
-                    loadConnectAd()
-                }
+    private fun currentTms(): Long {
+        return System.nanoTime() / 1000_000L
+    }
 
-                if (isActivityPaused()) {
-                    changeState(BaseService.State.Connected)
-                    return@launch
-                }
-
-                if (ad is BaseInterstitial) {
-                    ad.show(this@HomeActivity)
-                }
-                Core.stopService()
-                ConnResultActivity.open(this@HomeActivity, false, connectedServer)
-            } else {
-                changeState(BaseService.State.Connecting)
-                var serverEntity: ServerEntity? = null
-                var ad: BaseAd? = null
-
-                val adAwait = async {
-                    withTimeoutOrNull(10000) {
-                        ad = loadConnectAd()
-                        10
-                    } ?: 10
-                }
-
-                val connectAwait = async {
-                    serverEntity = connectTest()
-                    10
-                }
-
-                adAwait.await() > 5 && connectAwait.await() > 5
-                if (isActivityPaused()) {
-                    ad?.apply {
-                        AdLoader.add2cache(AdConst.adIns, this)
-                    }
-                    changeState(BaseService.State.Stopped)
-                    return@launch
-                }
-
-                if (serverEntity != null) {
-                    val profile = Profile()
-                    profile.host = serverEntity!!.host
-                    profile.remotePort = serverEntity!!.port
-                    profile.password = serverEntity!!.pwd
-                    Core.currentProfile = ProfileManager.expand(profile)
-                    connectedServer = serverEntity!!
-                    Core.startService()
-                    ConnResultActivity.open(this@HomeActivity, true, serverEntity)
-                } else {
-                    changeState(BaseService.State.Stopped)
-                    toastLong("Connect failed, try again")
-                }
-
-                val intersAd = ad
-                if (intersAd is BaseInterstitial) {
-                    intersAd.show(this@HomeActivity)
-                }
+    private var connectAd: BaseAd? = null
+    private var isConnect = false
+    //connect 连接流程完了
+    private var adLogicOver = false
+    private val connListener = object :AdsListener(){
+        override fun onAdLoaded(ad: BaseAd) {
+            if (ad !is AdmobInterstitial) return
+            if (!App.ins.isAppForeground()) {
+                AdLoader.add2cache(AdConst.adIns, ad)
+                return
             }
+            connectAd = ad
+            if (adLogicOver) {
+                AdLoader.add2cache(AdConst.adIns, ad)
+            }
+        }
 
+        override fun onAdDismiss() {
+            handleClose()
         }
     }
 
-    private suspend fun connectTest(): ServerEntity? = suspendCancellableCoroutine { const ->
+    private fun handleClose() {
+        if (isConnect) {
+            handleConnect()
+        } else {
+            dispatch2Result(false)
+        }
+    }
+
+    private fun loadConnectAd() {
+        connectAd = null
+        adLogicOver = false
+        AdLoader.loadAd(App.ins, AdConst.adIns, connListener)
+    }
+
+    //连接下一步
+    private fun handleConnect() {
+        //准备好账户直接连接
+        if (isAccountPrepared) {
+            //FirebaseEvents.impl.sendEvent("connect_success")
+            dispatch2Result(true)
+        } else {
+            onConnectFailed()
+            updateConnUI(BaseService.State.Stopped)
+        }
+    }
+
+    private fun externalCheckAd() {
+        //再额外的检查一次
+        if (connectAd == null) {
+            val cache = AdLoader.getCache(AdConst.adIns)
+            if (cache != null) {
+                cache.defineListener(connListener)
+                connListener.onAdLoaded(cache)
+            }
+        }
+    }
+
+    private var isAccountPrepared = false
+
+    private fun startConnect(server: ServerEntity) {
+        maskView?.visibility = View.GONE
+        AdLoader.preloadAd(AdConst.adResult)
+        
+        lifecycleScope.launch {
+            if (Core.isConnected()) {
+                isConnect = false
+                updateConnUI(BaseService.State.Stopping)
+                launch {
+                    loadConnectAd()
+                    val waits = 10//RemoteConfigs.getDisconnectTime() / 1000
+                    delay(2000L)
+                    var counter = 2
+                    while (connectAd == null && counter++ < waits) {
+                        delay(1000L)
+                    }
+                    //检查应用是否在前台，不在就取消操作
+                    if (isActivityPaused()) {
+                        connectAd?.let {
+                            AdLoader.add2cache(AdConst.adIns, it)
+                        }
+                        vConnection.service?.apply { onServiceConnected(this) }
+                        return@launch
+                    }
+
+                    externalCheckAd()
+                    when (connectAd) {
+                        is AdmobInterstitial -> {
+                            if ((connectAd as? AdmobInterstitial)?.show(this@HomeActivity) == false) {
+                                handleClose()
+                            }
+                        }
+                        else -> {
+                            handleClose()
+                        }
+                    }
+                    adLogicOver = true
+
+                    stopVPN()
+                }
+                return@launch
+            }
+
+            isConnect = true
+            updateConnUI(BaseService.State.Connecting)
+            launch {
+                loadConnectAd()
+                isAccountPrepared = false
+                val startTms = currentTms()
+                val connectTms = 10000L//RemoteConfigs.getConnectTime()
+                delay(2000L)
+
+                val awaitAccount = async {
+                    val isPrepared = withTimeoutOrNull(connectTms) {
+                        //Log.i("dsfafa", "smartConn.await()")
+                        isAccountPrepared = if (server.isFaster) startAutoConnecting() else startChoiceConnecting(server)
+                        //Log.i("dsfafa", "smartConn $isAccountPrepared")
+                        isAccountPrepared
+                    }
+                    isPrepared ?: false
+                }
+
+                //假象
+                val awaitAds = async(Dispatchers.Main) {
+                    val isLoaded = withTimeoutOrNull(3500) {
+                        //Log.i("dsfafa", "awaitAds.await()")
+                        true
+                    }
+                    isLoaded ?: false
+                }
+
+                awaitAccount.await() && awaitAds.await()
+                val cost = currentTms() - startTms
+                if (cost < connectTms) {
+                    delay(connectTms - cost)
+                }
+                //检查应用是否在前台，不在就取消操作
+                if (isActivityPaused()) {
+                    connectAd?.let {
+                        AdLoader.add2cache(AdConst.adIns, it)
+                    }
+                    vConnection.service?.apply { onServiceConnected(this) }
+                    return@launch
+                }
+                externalCheckAd()
+                adLogicOver = true
+                when (connectAd) {
+                    is AdmobInterstitial -> {
+                        if ((connectAd as? AdmobInterstitial)?.show(this@HomeActivity) == false) {
+                            handleConnect()
+                        }
+                    }
+
+                    else -> {
+                        handleConnect()
+                    }
+                }
+
+                if (isAccountPrepared) { //准备好账户直接连接
+                    //FirebaseEvents.impl.sendEvent("connect_success")
+                    startVPN()
+                }
+            }
+        }
+    }
+    
+    private suspend fun startAutoConnecting(): Boolean = suspendCancellableCoroutine { const ->
         runBlocking {
             DataStorage.startCheck {
                 if (isActivityPaused()) {
                     changeState(BaseService.State.Stopped)
-                    const.resume(null)
+                    const.resume(false)
                     return@startCheck
                 }
 
                 if (it != null) {
-                    const.resume(it)
+                    defineServer(it)
+                    const.resume(true)
                 } else {
                     changeState(BaseService.State.Stopped)
-                    const.resume(null)
+                    const.resume(false)
                 }
             }
         }
     }
 
-    private suspend fun loadConnectAd(): BaseAd? = suspendCancellableCoroutine {
-        AdLoader.loadAd(App.ins, AdConst.adIns, object : AdsListener() {
-            var isResumed = false
+    private suspend fun startChoiceConnecting(serverEntity: ServerEntity): Boolean = suspendCancellableCoroutine {
+        defineServer(serverEntity)
+        if (it.isActive)
+            it.resume(true)
+    }
 
-            override fun onAdLoaded(ad: BaseAd) {
-                if (!isResumed) {
-                    isResumed = true
-                    it.resume(ad)
-                }
-            }
-
-            override fun onAdError(err: String?) {
-                if (!isResumed) {
-                    isResumed = true
-                    it.resume(null)
-                }
-            }
-        })
+    private fun defineServer(serverEntity: ServerEntity) {
+        val profile = Profile()
+        profile.host = serverEntity.host
+        profile.remotePort = serverEntity.port
+        profile.password = serverEntity.pwd
+        Core.currentProfile = ProfileManager.expand(profile)
     }
 
 
@@ -476,6 +583,14 @@ class HomeActivity: BasicActivity<ActivityHomeBinding>(), View.OnClickListener, 
         }
 
         AdLoader.preloadAd(AdConst.adMain)
+    }
+
+    private fun startVPN() {
+        Core.startService()
+    }
+
+    private fun stopVPN() {
+        Core.stopService()
     }
 
 

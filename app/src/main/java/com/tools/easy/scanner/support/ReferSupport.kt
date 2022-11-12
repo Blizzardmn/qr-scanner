@@ -5,6 +5,7 @@ import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 import com.android.installreferrer.api.ReferrerDetails
 import com.tools.easy.scanner.datas.AppConfig
+import com.tools.easy.scanner.datas.AppEventLogger
 import com.tools.easy.scanner.datas.DataStorage
 
 /**
@@ -30,7 +31,7 @@ object ReferSupport {
     fun referCheck(context: Context) {
         val refer = AppConfig.ins.installReferer
         if (!refer.isNullOrEmpty()) {
-            analyzeUser(refer)
+            analyzeUser(refer, false)
             return
         }
         val referrerClient = InstallReferrerClient.newBuilder(context).build()
@@ -47,7 +48,7 @@ object ReferSupport {
                         val instantExperienceLaunched: Boolean = response.googlePlayInstantParam
 
                         if (!referrerUrl.isNullOrEmpty()) {
-                            analyzeUser(referrerUrl)
+                            analyzeUser(referrerUrl, true)
                             AppConfig.ins.installReferer = referrerUrl
                         }
 
@@ -69,19 +70,19 @@ object ReferSupport {
         })
     }
 
-    private fun analyzeUser(refer: String) {
+    private fun analyzeUser(refer: String, isInit: Boolean) {
         fetchSuccess = true
         when {
             refer.contains("fb4a") -> {
                 isUserOrganic = false
                 isUserFb = true
-                //AppEventLogger.INSTANCE.sendEvent("refer_success_fb")
+                if (isInit) AppEventLogger.ins.logEvent("refer_success_fb")
             }
 
             else -> {
                 isUserFb = false
                 isUserOrganic = true
-                //AppEventLogger.INSTANCE.sendEvent("refer_success_organic")
+                if (isInit) AppEventLogger.ins.logEvent("refer_success_organic")
             }
         }
     }

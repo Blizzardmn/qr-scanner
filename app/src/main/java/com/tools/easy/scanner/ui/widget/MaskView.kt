@@ -5,6 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.tools.easy.scanner.R
 import org.jetbrains.anko.dip
 
 /**
@@ -13,6 +14,7 @@ import org.jetbrains.anko.dip
 class MaskView: View {
     private lateinit var paint: Paint
     private lateinit var bitmapPaint: Paint
+    private lateinit var bitmap: Bitmap
     private var rect = Rect()
     private var view: View? = null
     private val xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
@@ -45,7 +47,7 @@ class MaskView: View {
         isClickable = true
         isFocusable = true
         setLayerType(LAYER_TYPE_SOFTWARE, null)
-        //bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_finger)
+        bitmap = BitmapFactory.decodeResource(resources, R.mipmap.click)
     }
 
     fun setView(view: View, onClick: () -> Unit) {
@@ -56,12 +58,17 @@ class MaskView: View {
             right = view.x + view.width
             top = view.y
             bottom = view.y + view.height
-            guideClickLeft = right * 0.85f
-            guideClickTop = (view.bottom + context.dip(8f)).toFloat()
+            guideClickLeft = (left + right) / 2.5f
+            guideClickTop = (view.bottom - dip(40f)).toFloat()
             rect = Rect(0, 0, width, height)
 
             invalidate()
         }
+    }
+
+    private fun dp2px(context: Context, value: Int): Int {
+        val v = context.resources.displayMetrics.density
+        return (v * value + 0.5f).toInt()
     }
 
 
@@ -69,16 +76,17 @@ class MaskView: View {
         super.onDraw(canvas)
         paint.xfermode = xfermode
         paint.color = Color.TRANSPARENT
-        canvas?.drawRect(left, top, right, bottom, paint)
+        canvas?.drawCircle((left+right)/2, (top+bottom)/2, dp2px(context, 80).toFloat(), paint)
+        //canvas?.drawRect(left, top, right, bottom, paint)
         paint.xfermode = null
 
-        //canvas?.drawBitmap(bitmap, guideClickLeft, guideClickTop, bitmapPaint)
+        canvas?.drawBitmap(bitmap, guideClickLeft, guideClickTop, bitmapPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action) {
             MotionEvent.ACTION_UP -> {
-                if (view == null) return true
+                /*if (view == null) return true
 
                 val location = IntArray(2)
                 view?.getLocationOnScreen(location)
@@ -86,7 +94,8 @@ class MaskView: View {
                     && event.rawY >= location[1] && event.rawY <= location[1] + view!!.height
                 ) {
                     onClick?.invoke()
-                }
+                }*/
+                onClick?.invoke()
             }
         }
         return super.onTouchEvent(event)
